@@ -1,6 +1,8 @@
 .venv/*
+staticfiles/*
 media/*
 .idea/*
 *.pyc
 .env
 db.sqlite3
+digikills.sock
