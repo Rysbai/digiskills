@@ -1,0 +1,69 @@
+from django_summernote.admin import SummernoteModelAdmin
+from django_summernote.utils import get_attachment_model
+from django.contrib import admin
+from django.contrib.auth.models import Group, User
+
+from course.models import Course, \
+    Category, \
+    ProgramItem, \
+    Material, \
+    VideoLesson, \
+    ScheduleItem
+
+
+class ProgramItemInline(admin.TabularInline):
+    model = ProgramItem
+    fk_name = 'course'
+
+
+class ScheduleItemInline(admin.TabularInline):
+    model = ScheduleItem
+    fk_name = 'course'
+
+
+class MaterialsInline(admin.TabularInline):
+    model = Material
+    fk_name = 'course'
+
+
+class VideoLessonsInline(admin.TabularInline):
+    model = VideoLesson
+    fk_name = 'course'
+
+
+class CategoryAdmin(admin.ModelAdmin):
+    pass
+
+
+class CourseAdmin(SummernoteModelAdmin):
+    summernote_fields = ''
+    readonly_fields = ('image_tag', )
+    fieldsets = (
+        (None, {
+            'fields': ('category', 'teacher')
+        }),
+        ("Название курса", {
+            'fields': ('name_kg', 'name_ru')
+        }),
+        ("Описание курса", {
+            'fields': ('description_kg', 'description_ru')
+        }),
+        (None, {
+            'fields': ('image', 'image_tag', 'registration_link', 'start', 'end')
+        }),
+    )
+    inlines = (
+        ProgramItemInline,
+        ScheduleItemInline,
+        MaterialsInline,
+        VideoLessonsInline
+    )
+
+
+admin.site.unregister(Group)
+admin.site.unregister(User)
+admin.site.unregister(get_attachment_model())
+
+
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Course, CourseAdmin)
