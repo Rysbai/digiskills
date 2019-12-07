@@ -19,6 +19,22 @@ class CategorySerializer(Serializer):
         }
 
 
+class TeacherSerializer(Serializer):
+    def __init__(self, *args, lang=None,  **kwargs):
+        self.lang = lang
+        super(Serializer, self).__init__(*args, **kwargs)
+
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'name': instance.name,
+            'surname': instance.surname,
+            'about': instance.about_ru if instance.about_ru and self.lang == 'ru' else instance.about_kg,
+            'image': instance.image.url,
+            'language': instance.language
+        }
+
+
 class CourseSerializer(Serializer):
     def __init__(self, *args, lang=None, **kwargs):
         self.lang = lang
@@ -29,6 +45,7 @@ class CourseSerializer(Serializer):
             'id': instance.id,
             'category_id': instance.category_id,
             'teacher_id': instance.teacher_id,
+            'language': instance.language,
             'name': instance.name_ru if instance.name_ru and self.lang == 'ru' else instance.name_kg,
             'description': instance.description_ru if instance.description_ru and self.lang == 'ru' \
                 else instance.description_kg,

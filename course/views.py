@@ -5,12 +5,14 @@ from rest_framework import status
 
 
 from course.models import Category,\
+    Teacher,\
     Course,\
     ScheduleItem,\
     ProgramItem,\
     Material,\
     VideoLesson
 from course.serializers import CategorySerializer,\
+    TeacherSerializer,\
     CourseSerializer,\
     ScheduleItemSerializer,\
     ProgramItemSerializer,\
@@ -33,6 +35,26 @@ class CategoryListView(APIView):
                 return Response(data=serializer.data, status=status.HTTP_200_OK)
 
         serializer = self.serializer_class(self.queryset.all(), many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class TeacherView(APIView):
+    queryset = Teacher.objects.all()
+    serializer_class = TeacherSerializer
+
+    def get(self, request, pk=None, *args, **kwargs):
+        lang = request.query_params.get('lang', None)
+        if pk:
+            try:
+                instance = self.queryset.get(id=pk)
+            except Teacher.DoesNotExist:
+                raise Http404
+            else:
+                serializer = self.serializer_class(instance, lang=lang)
+                return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+        instances = self.queryset.all()
+        serializer = self.serializer_class(instances,lang=lang, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 

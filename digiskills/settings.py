@@ -20,9 +20,9 @@ INSTALLED_APPS = [
     'django_summernote',
 
     'course.apps.CourseConfig',
-    'teacher.apps.TeacherConfig',
     'news.apps.NewsConfig',
-    'contacts.apps.ContactsConfig'
+    'contacts.apps.ContactsConfig',
+    'aboutus.apps.AboutusConfig'
 ]
 
 MIDDLEWARE = [
