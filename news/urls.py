@@ -5,6 +5,7 @@ from news.views import NewsView
 
 urlpatterns = [
     path('', NewsView.as_view()),
+    path('<int:pk>', NewsView.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

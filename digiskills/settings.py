@@ -5,7 +5,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = (config('DEBUG') == 'True')
 
-ALLOWED_HOSTS = ['64.225.36.157']
+ALLOWED_HOSTS = ['64.225.36.157', '127.0.0.1']
 
 
 INSTALLED_APPS = [

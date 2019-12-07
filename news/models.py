@@ -11,9 +11,8 @@ class News(models.Model):
     description_kg = models.TextField(verbose_name='Кыргызча')
     description_ru = models.TextField(verbose_name='На русском')
     image = models.ImageField(upload_to='news/', verbose_name='Изображение')
-    date = models.DateField(verbose_name='Дата проведения')
-    location_kg = models.CharField(max_length=LOCATION_MAX_LENGTH, verbose_name='Кыргызча')
-    location_ru = models.CharField(max_length=LOCATION_MAX_LENGTH, verbose_name='На русском')
+    views = models.PositiveIntegerField(default=0)
+    available = models.BooleanField(default=False, verbose_name='Опубликовать')
 
     def image_tag(self):
         return mark_safe('<img src="/media/%s" width=500, height=300 >' % self.image)
@@ -22,7 +21,7 @@ class News(models.Model):
     image_tag.allow_tags = True
 
     def __str__(self):
-        return self.title_ru
+        return self.title_ru or self.title_kg
 
     class Meta:
         ordering = ('-id', )

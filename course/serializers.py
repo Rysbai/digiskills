@@ -1,45 +1,42 @@
 from rest_framework import serializers
+from rest_framework.serializers import Serializer
 
-from course.models import Category,\
+from course.models import \
     Course, \
     ProgramItem,\
-    Material,\
-    VideoLesson,\
     ScheduleItem
-from teacher.models import Teacher
 
 
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = '__all__'
+class CategorySerializer(Serializer):
+    def __init__(self, *args, lang=None, **kwargs):
+        self.lang = lang
+        super(Serializer, self).__init__(*args, **kwargs)
+
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'name': instance.name_ru if instance.name_ru and self.lang == 'ru' else instance.name_kg
+        }
 
 
-class CourseSerializer(serializers.ModelSerializer):
-    category_id = serializers.PrimaryKeyRelatedField(
-        queryset=Category.objects.all(),
-        source='category.id'
-    )
-    teacher_id = serializers.PrimaryKeyRelatedField(
-        queryset=Teacher.objects.all(),
-        source='teacher.id'
-    )
+class CourseSerializer(Serializer):
+    def __init__(self, *args, lang=None, **kwargs):
+        self.lang = lang
+        super(Serializer, self).__init__(*args, **kwargs)
 
-    class Meta:
-        model = Course
-        fields = (
-            'id',
-            'category_id',
-            'teacher_id',
-            'name_kg',
-            'name_ru',
-            'description_kg',
-            'description_ru',
-            'image',
-            'registration_link',
-            'start',
-            'end'
-        )
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'category_id': instance.category_id,
+            'teacher_id': instance.teacher_id,
+            'name': instance.name_ru if instance.name_ru and self.lang == 'ru' else instance.name_kg,
+            'description': instance.description_ru if instance.description_ru and self.lang == 'ru' \
+                else instance.description_kg,
+            'image': instance.image.url,
+            'registration_link': instance.registration_link,
+            'start': instance.start,
+            'end': instance.end
+        }
 
 
 class ScheduleItemSerializer(serializers.ModelSerializer):
@@ -64,23 +61,31 @@ class ProgramItemSerializer(serializers.ModelSerializer):
         fields = ('id', 'course_id', 'title')
 
 
-class MaterialSerializer(serializers.ModelSerializer):
-    course_id = serializers.PrimaryKeyRelatedField(
-        queryset=Course.objects.all(),
-        source='course.id'
-    )
+class MaterialSerializer(Serializer):
+    def __init__(self, *args, lang=None, **kwargs):
+        self.lang = lang
+        super(Serializer, self).__init__(*args, **kwargs)
 
-    class Meta:
-        model = Material
-        fields = ('id', 'course_id', 'description_kg', 'description_ru', 'link')
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'course_id': instance.course_id,
+            'description': instance.description_ru if instance.description_ru and self.lang == 'ru' \
+                else instance.description_kg,
+            'link': instance.link
+        }
 
 
-class VideoLessonSerializer(serializers.ModelSerializer):
-    course_id = serializers.PrimaryKeyRelatedField(
-        queryset=Course.objects.all(),
-        source='course.id'
-    )
+class VideoLessonSerializer(Serializer):
+    def __init__(self, *args, lang=None, **kwargs):
+        self.lang = lang
+        super(Serializer, self).__init__(*args, **kwargs)
 
-    class Meta:
-        model = VideoLesson
-        fields = ('id', 'course_id', 'description_kg', 'description_ru', 'link')
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'course_id': instance.course_id,
+            'description': instance.description_ru if instance.description_ru and self.lang == 'ru' \
+                else instance.description_kg,
+            'link': instance.link
+        }
