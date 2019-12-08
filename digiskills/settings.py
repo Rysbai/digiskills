@@ -18,6 +18,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'django_summernote',
+    'django_extensions',
 
     'course.apps.CourseConfig',
     'news.apps.NewsConfig',
