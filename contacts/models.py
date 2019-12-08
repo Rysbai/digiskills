@@ -1,6 +1,6 @@
 from django.db import models
 
-CONTACT_TYPES = [('phone', "PHONE"), ('facebook', "FACEBOOK"), ('email', "EMAIL")]
+CONTACT_TYPES = [('phone', "Телефон"), ('facebook', "Facebook"), ('email', "Email"), ('instagram', "Instagram")]
 VALUE_MAX_LENGTH = 200
 
 

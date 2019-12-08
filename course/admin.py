@@ -46,17 +46,17 @@ class CourseAdmin(SummernoteModelAdmin):
     readonly_fields = ('image_tag', )
     fieldsets = (
         (None, {
-            'fields': ('category', 'teacher', 'language')
+            'fields': (
+                'category', 'teacher', 'language',
+                'image', 'image_tag', 'registration_link', 'start', 'end'
+            )
         }),
         ("Название курса", {
             'fields': ('name_kg', 'name_ru')
         }),
         ("Описание курса", {
             'fields': ('description_kg', 'description_ru')
-        }),
-        (None, {
-            'fields': ('image', 'image_tag', 'registration_link', 'start', 'end')
-        }),
+        })
     )
     inlines = (
         ProgramItemInline,

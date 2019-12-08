@@ -10,8 +10,15 @@ def validate_only_one_instance(obj):
 
 
 class AboutUs(models.Model):
-    payload_kg = models.TextField()
-    payload_ru = models.TextField()
+    payload_kg = models.TextField(verbose_name='Контент на кыргызском')
+    payload_ru = models.TextField(verbose_name='Контент на русском')
 
     def clean(self):
         validate_only_one_instance(self)
+
+    def __str__(self):
+        return 'Текст о нас'
+
+    class Meta:
+        verbose_name = 'О нас'
+        verbose_name_plural = 'О нас'

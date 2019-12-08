@@ -7,6 +7,9 @@ class NewsAdmin(admin.ModelAdmin):
     summernote_fields = ('description_kg', 'description_ru')
     readonly_fields = ('image_tag',)
     fieldsets = (
+        (None, {
+            'fields': ('image', 'image_tag')
+        }),
         ("Название мероприятия", {
             'fields': ('title_kg', 'title_ru')
         }),
@@ -14,7 +17,7 @@ class NewsAdmin(admin.ModelAdmin):
             'fields': ('description_kg', 'description_ru')
         }),
         (None, {
-            'fields': ('image', 'image_tag', 'available')
+            'fields': ('available', )
         })
     )
 

@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 
-from course.views import CategoryListView, \
+from course.views import CategoryView, \
     TeacherView,\
     CourseView, \
     ScheduleView, \
@@ -10,8 +10,8 @@ from course.views import CategoryListView, \
     VideoLessonView
 
 urlpatterns = [
-    path('categories/', CategoryListView.as_view()),
-    path('categories/<int:pk>/', CategoryListView.as_view()),
+    path('categories/', CategoryView.as_view()),
+    path('categories/<int:pk>/', CategoryView.as_view()),
 
     path('teachers/', TeacherView.as_view()),
     path('teachers/<int:pk>/', TeacherView.as_view()),

@@ -20,21 +20,22 @@ from course.serializers import CategorySerializer,\
     VideoLessonSerializer
 
 
-class CategoryListView(APIView):
+class CategoryView(APIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
     def get(self, request, pk=None,  *args, **kwargs):
+        lang = request.query_params.get('lang', None)
         if pk:
             try:
                 instance = self.queryset.get(id=pk)
             except Course.DoesNotExist:
                 raise Http404
             else:
-                serializer = self.serializer_class(instance)
+                serializer = self.serializer_class(instance, lang=lang)
                 return Response(data=serializer.data, status=status.HTTP_200_OK)
 
-        serializer = self.serializer_class(self.queryset.all(), many=True)
+        serializer = self.serializer_class(self.queryset.all(), lang=lang, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
@@ -119,12 +120,13 @@ class MaterialView(APIView):
 
     def get(self, request, *args, **kwargs):
         course_id = request.query_params.get('course_id', None)
+        lang = request.query_params.get('lang', None)
         if course_id:
             instances = self.queryset.filter(course_id=course_id)
         else:
             instances = self.queryset.all()
 
-        serializer = self.serializer_class(instances, many=True)
+        serializer = self.serializer_class(instances, lang=lang, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
@@ -134,10 +136,11 @@ class VideoLessonView(APIView):
 
     def get(self, request, *args, **kwargs):
         course_id = request.query_params.get('course_id', None)
+        lang = request.query_params.get('lang', None)
         if course_id:
             instances = self.queryset.filter(course_id=course_id)
         else:
             instances = self.queryset.all()
 
-        serializer = self.serializer_class(instances, many=True)
+        serializer = self.serializer_class(instances, lang=lang, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)

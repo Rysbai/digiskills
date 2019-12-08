@@ -24,11 +24,11 @@ DAYS_OF_WEEK = (
 
 
 class Category(models.Model):
-    kg_name = models.CharField(max_length=CATEGORY_NAME_MAX_LENGTH, verbose_name='Имя на кыргызском')
-    ru_name = models.CharField(max_length=CATEGORY_NAME_MAX_LENGTH, verbose_name='Имя на русском')
+    name_kg = models.CharField(max_length=CATEGORY_NAME_MAX_LENGTH, verbose_name='Имя на кыргызском')
+    name_ru = models.CharField(max_length=CATEGORY_NAME_MAX_LENGTH, verbose_name='Имя на русском')
 
     def __str__(self):
-        return self.ru_name
+        return self.name_ru or self.name_ru
 
     class Meta:
         verbose_name = 'Категория'
@@ -82,7 +82,7 @@ class Course(models.Model):
     def image_tag(self):
         return mark_safe('<img src="/media/%s" width=500, height=300 >' % self.image)
 
-    image_tag.short_description = 'Изображение'
+    image_tag.short_description = 'Превю изображения(можно видеть после сохранения)'
     image_tag.allow_tags = True
 
     def __str__(self):
