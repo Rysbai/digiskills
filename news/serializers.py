@@ -14,5 +14,5 @@ class NewsSerializer(Serializer):
                 else instance.description_kg,
             'image': instance.image.url,
             'views': instance.views,
-            'available': instance.available
+            'pub_date': instance.pub_date
         }

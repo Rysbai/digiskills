@@ -29,6 +29,7 @@ class TeacherSerializer(Serializer):
             'id': instance.id,
             'name': instance.name,
             'surname': instance.surname,
+            'position': instance.position,
             'about': instance.about_ru if instance.about_ru and self.lang == 'ru' else instance.about_kg,
             'image': instance.image.url,
             'language': instance.language
