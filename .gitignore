@@ -1,6 +1,7 @@
 .venv/*
 staticfiles/*
 media/*
+static/*
 .idea/*
 *.pyc
 .env
