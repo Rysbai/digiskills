@@ -38,7 +38,8 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class TeacherAdmin(admin.ModelAdmin):
     readonly_fields = ('image_tag',)
-    fields = ('name', 'surname', 'language', 'about_ru', 'about_kg', 'image', 'image_tag')
+    list_display = ('__str__', )
+    fields = ('name', 'surname', 'position', 'language', 'about_ru', 'about_kg', 'image', 'image_tag')
 
 
 class CourseAdmin(SummernoteModelAdmin):

@@ -1,4 +1,5 @@
 from django.http import Http404
+import datetime
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -8,7 +9,7 @@ from news.serializers import NewsSerializer
 
 
 class NewsView(APIView):
-    queryset = News.objects.filter(available=True)
+    queryset = News.objects.filter(pub_date__gt=datetime.datetime.now())
     serializer_class = NewsSerializer
 
     def get(self, request, pk=None, *args, **kwargs):

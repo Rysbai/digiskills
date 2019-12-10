@@ -38,6 +38,7 @@ class Category(models.Model):
 class Teacher(models.Model):
     name = models.CharField(max_length=TEACHER_NAMES_MAX_LENGTH, verbose_name='Имя')
     surname = models.CharField(max_length=TEACHER_NAMES_MAX_LENGTH, verbose_name='Фамилия')
+    position = models.CharField(max_length=300, verbose_name='Должность')
     language = models.CharField(
         max_length=LANGUAGE_MAX_LENGTH,
         choices=LANGUAGE_CHOICES,
@@ -48,13 +49,13 @@ class Teacher(models.Model):
     image = models.ImageField(verbose_name='Изображение')
 
     def image_tag(self):
-        return mark_safe('<img src="/media/%s" width=400, height=300 >' % self.image)
+        return mark_safe('<img src="/media/%s" width=300, height=400 >' % self.image)
 
     image_tag.short_description = 'Изображение'
     image_tag.allow_tags = True
 
     def __str__(self):
-        return self.name + self.surname
+        return self.name + ' ' + self.surname
 
     class Meta:
         verbose_name = 'Преподователь'
