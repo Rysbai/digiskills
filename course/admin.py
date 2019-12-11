@@ -3,6 +3,7 @@ from django_summernote.utils import get_attachment_model
 from django.contrib import admin
 from django.contrib.auth.models import Group, User
 
+from course.forms import CourseForm, MaterialForm, VideoLessonForm
 from course.models import Course, \
     Teacher,\
     Category, \
@@ -23,11 +24,13 @@ class ScheduleItemInline(admin.TabularInline):
 
 
 class MaterialsInline(admin.TabularInline):
+    form = MaterialForm
     model = Material
     fk_name = 'course'
 
 
 class VideoLessonsInline(admin.TabularInline):
+    form = VideoLessonForm
     model = VideoLesson
     fk_name = 'course'
 
@@ -43,6 +46,7 @@ class TeacherAdmin(admin.ModelAdmin):
 
 
 class CourseAdmin(SummernoteModelAdmin):
+    form = CourseForm
     summernote_fields = ''
     readonly_fields = ('image_tag', )
     fieldsets = (

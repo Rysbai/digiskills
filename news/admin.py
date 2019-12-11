@@ -1,10 +1,12 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
 
+from news.forms import NewsForm
 from news.models import News
 
 
 class NewsAdmin(SummernoteModelAdmin):
+    form = NewsForm
     summernote_fields = ('description_kg', 'description_ru')
     readonly_fields = ('image_tag', 'views')
     list_display = ('__str__', 'views')
@@ -12,7 +14,7 @@ class NewsAdmin(SummernoteModelAdmin):
         (None, {
             'fields': ('image', 'image_tag', 'views', 'pub_date')
         }),
-        ("Название мероприятия", {
+        ("Заголовок мероприятия", {
             'fields': ('title_kg', 'title_ru')
         }),
         ("Описание", {

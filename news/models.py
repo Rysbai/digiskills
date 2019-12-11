@@ -7,10 +7,10 @@ LOCATION_MAX_LENGTH = 200
 
 
 class News(models.Model):
-    title_kg = models.CharField(max_length=TITLE_MAX_LENGTH, verbose_name='Кыргызча')
-    title_ru = models.CharField(max_length=TITLE_MAX_LENGTH, verbose_name='На русском')
-    description_kg = models.TextField(verbose_name='Кыргызча')
-    description_ru = models.TextField(verbose_name='На русском')
+    title_kg = models.CharField(max_length=TITLE_MAX_LENGTH, verbose_name='Кыргызча', null=True)
+    title_ru = models.CharField(max_length=TITLE_MAX_LENGTH, verbose_name='На русском', null=True)
+    description_kg = models.TextField(verbose_name='Кыргызча', blank=True)
+    description_ru = models.TextField(verbose_name='На русском', blank=True)
     image = models.ImageField(upload_to='news/', verbose_name='Изображение')
     views = models.PositiveIntegerField(default=0, verbose_name='Просмотры')
     pub_date = models.DateTimeField(default=datetime.now(), verbose_name='Дата публикации')

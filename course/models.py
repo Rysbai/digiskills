@@ -44,8 +44,8 @@ class Teacher(models.Model):
         choices=LANGUAGE_CHOICES,
         verbose_name='Язык преподования'
     )
-    about_kg = models.TextField(verbose_name='О препод. на кыргызском')
-    about_ru = models.TextField(verbose_name='О препод. на русском')
+    about_kg = models.TextField(verbose_name='О препод. на кыргызском', null=True)
+    about_ru = models.TextField(verbose_name='О препод. на русском', null=True)
     image = models.ImageField(verbose_name='Изображение')
 
     def image_tag(self):
@@ -70,10 +70,10 @@ class Course(models.Model):
         choices=LANGUAGE_CHOICES,
         verbose_name='Язык проведения'
     )
-    name_kg = models.CharField(max_length=COURSE_NAME_MAX_LENGTH, verbose_name='На кыргызском')
-    name_ru = models.CharField(max_length=COURSE_NAME_MAX_LENGTH, verbose_name='На русском')
-    description_kg = models.TextField(verbose_name='На кыргызском')
-    description_ru = models.TextField(verbose_name='На русском')
+    name_kg = models.CharField(max_length=COURSE_NAME_MAX_LENGTH, verbose_name='На кыргызском', null=True)
+    name_ru = models.CharField(max_length=COURSE_NAME_MAX_LENGTH, verbose_name='На русском', null=True)
+    description_kg = models.TextField(verbose_name='На кыргызском', blank=True)
+    description_ru = models.TextField(verbose_name='На русском', blank=True)
     image = models.ImageField(upload_to='course/', verbose_name='Изображение')
     registration_link = models.CharField(max_length=CATEGORY_NAME_MAX_LENGTH, verbose_name='Ссылка на регистрацию')
     start = models.DateField(verbose_name='Начало')
@@ -87,7 +87,7 @@ class Course(models.Model):
     image_tag.allow_tags = True
 
     def __str__(self):
-        return self.name_ru
+        return self.name_ru or self.name_kg
 
     class Meta:
         ordering = ('-id', )
@@ -119,8 +119,8 @@ class ProgramItem(models.Model):
 
 class Material(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    description_kg = models.CharField(max_length=500, verbose_name='Описание(Kg)')
-    description_ru = models.CharField(max_length=500, verbose_name='Описание(Ru)')
+    description_kg = models.CharField(max_length=500, verbose_name='Описание(Kg)', null=True)
+    description_ru = models.CharField(max_length=500, verbose_name='Описание(Ru)', null=True)
     link = models.CharField(max_length=CATEGORY_NAME_MAX_LENGTH, verbose_name='Ссылка')
 
     class Meta:
@@ -130,8 +130,8 @@ class Material(models.Model):
 
 class VideoLesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    description_kg = models.CharField(max_length=500, verbose_name='Описание(Kg)')
-    description_ru = models.CharField(max_length=500, verbose_name='Описание(Ru)')
+    description_kg = models.CharField(max_length=500, verbose_name='Описание(Kg)', null=True)
+    description_ru = models.CharField(max_length=500, verbose_name='Описание(Ru)', null=True)
     link = models.CharField(max_length=CATEGORY_NAME_MAX_LENGTH, verbose_name='Ссылка')
 
     class Meta:
