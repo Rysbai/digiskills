@@ -79,7 +79,7 @@ class Teacher(models.Model):
         super().save(*args, **kwargs)
 
     def compress_image(self, image):
-        image_size = (1020, 1020)
+        image_size = (960, 960)
         image_temproary = Image.open(image)
         output_io_stream = BytesIO()
         image_format = "JPEG" if image.name.split('.')[-1] == 'jpg' else image.name.split('.')[-1]
@@ -145,7 +145,7 @@ class Course(models.Model):
         super().save(*args, **kwargs)
 
     def compress_image(self, image):
-        image_size = (1200, 900)
+        image_size = (960, 540)
         image_temproary = Image.open(image)
         output_io_stream = BytesIO()
         image_format = "JPEG" if image.name.split('.')[-1] == 'jpg' else image.name.split('.')[-1]
