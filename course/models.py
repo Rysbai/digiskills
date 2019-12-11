@@ -1,6 +1,9 @@
+import sys
+from PIL import Image
+from io import BytesIO
 from django.db import models
 from django.utils.safestring import mark_safe
-
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 CATEGORY_NAME_MAX_LENGTH = 200
 COURSE_NAME_MAX_LENGTH = 200
@@ -46,10 +49,10 @@ class Teacher(models.Model):
     )
     about_kg = models.TextField(verbose_name='О препод. на кыргызском', null=True)
     about_ru = models.TextField(verbose_name='О препод. на русском', null=True)
-    image = models.ImageField(verbose_name='Изображение')
+    image = models.ImageField(upload_to='teacher/', verbose_name='Изображение')
 
     def image_tag(self):
-        return mark_safe('<img src="/media/%s" width=300, height=400 >' % self.image)
+        return mark_safe('<img src="/media/{}" width="50%", height="50%" >'.format(self.image))
 
     image_tag.short_description = 'Изображение'
     image_tag.allow_tags = True
@@ -60,6 +63,39 @@ class Teacher(models.Model):
     class Meta:
         verbose_name = 'Преподователь'
         verbose_name_plural = 'Преподователи'
+
+    def __init__(self, *args, **kwargs):
+        super(Teacher, self).__init__(*args, **kwargs)
+        self._past_image = self.image
+
+    def save(self, *args, **kwargs):
+        is_create = False
+        if self._state.adding:
+            is_create = True
+        if is_create or self._past_image != self.image:
+            self.image = self.compress_image(self.image)
+            self._past_image = self.image
+
+        super().save(*args, **kwargs)
+
+    def compress_image(self, image):
+        image_size = (1020, 1020)
+        image_temproary = Image.open(image)
+        output_io_stream = BytesIO()
+        image_format = "JPEG" if image.name.split('.')[-1] == 'jpg' else image.name.split('.')[-1]
+
+        image_temproary_resized = image_temproary.resize(image_size, Image.ANTIALIAS)
+        image_temproary_resized.save(output_io_stream, format=image_format)
+        output_io_stream.seek(0)
+        uploaded_image = InMemoryUploadedFile(
+            output_io_stream,
+            'ImageField',
+            image.name,
+            'image/{}'.format(image_format),
+            sys.getsizeof(output_io_stream),
+            None
+        )
+        return uploaded_image
 
 
 class Course(models.Model):
@@ -81,7 +117,7 @@ class Course(models.Model):
     available = models.BooleanField(verbose_name='Опубликовать', default=False)
 
     def image_tag(self):
-        return mark_safe('<img src="/media/%s" width=500, height=300 >' % self.image)
+        return mark_safe('<img src="/media/{}" width="50%", height="50%" >'.format(self.image))
 
     image_tag.short_description = 'Превю изображения(можно видеть после сохранения)'
     image_tag.allow_tags = True
@@ -93,6 +129,39 @@ class Course(models.Model):
         ordering = ('-id', )
         verbose_name = 'Курс'
         verbose_name_plural = 'Курсы'
+
+    def __init__(self, *args, **kwargs):
+        super(Course, self).__init__(*args, **kwargs)
+        self._past_image = self.image
+
+    def save(self, *args, **kwargs):
+        is_create = False
+        if self._state.adding:
+            is_create = True
+        if is_create or self._past_image != self.image:
+            self.image = self.compress_image(self.image)
+            self._past_image = self.image
+
+        super().save(*args, **kwargs)
+
+    def compress_image(self, image):
+        image_size = (1200, 900)
+        image_temproary = Image.open(image)
+        output_io_stream = BytesIO()
+        image_format = "JPEG" if image.name.split('.')[-1] == 'jpg' else image.name.split('.')[-1]
+
+        image_temproary_resized = image_temproary.resize(image_size, Image.ANTIALIAS)
+        image_temproary_resized.save(output_io_stream, format=image_format)
+        output_io_stream.seek(0)
+        uploaded_image = InMemoryUploadedFile(
+            output_io_stream,
+            'ImageField',
+            image.name,
+            'image/{}'.format(image_format),
+            sys.getsizeof(output_io_stream),
+            None
+        )
+        return uploaded_image
 
 
 class ScheduleItem(models.Model):
