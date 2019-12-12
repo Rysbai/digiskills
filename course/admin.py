@@ -1,38 +1,12 @@
-from django_summernote.admin import SummernoteModelAdmin
+from django_summernote.admin import SummernoteModelAdmin, SummernoteInlineModelAdmin
 from django_summernote.utils import get_attachment_model
 from django.contrib import admin
 from django.contrib.auth.models import Group, User
 
-from course.forms import CourseForm, MaterialForm, VideoLessonForm
 from course.models import Course, \
     Teacher,\
     Category, \
-    ProgramItem, \
-    Material, \
-    VideoLesson, \
-    ScheduleItem
-
-
-class ProgramItemInline(admin.TabularInline):
-    model = ProgramItem
-    fk_name = 'course'
-
-
-class ScheduleItemInline(admin.TabularInline):
-    model = ScheduleItem
-    fk_name = 'course'
-
-
-class MaterialsInline(admin.TabularInline):
-    form = MaterialForm
-    model = Material
-    fk_name = 'course'
-
-
-class VideoLessonsInline(admin.TabularInline):
-    form = VideoLessonForm
-    model = VideoLesson
-    fk_name = 'course'
+    ProgramItem
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -45,29 +19,39 @@ class TeacherAdmin(admin.ModelAdmin):
     fields = ('name', 'surname', 'position', 'language', 'about_ru', 'about_kg', 'image', 'image_tag')
 
 
+class ProgramItemInline(admin.StackedInline, SummernoteInlineModelAdmin):
+    summernote_fields = '__all__'
+    model = ProgramItem
+    fk_name = 'course'
+
+
 class CourseAdmin(SummernoteModelAdmin):
-    form = CourseForm
     summernote_fields = ''
     readonly_fields = ('image_tag', )
     fieldsets = (
         (None, {
             'fields': (
-                'category', 'teacher', 'language',
-                'image', 'image_tag', 'registration_link', 'start', 'end'
+                'category',
+                'teacher',
+                'language',
+                'image',
+                'image_tag',
+                'name',
+                'description',
+                'available',
+                'isOnline'
             )
         }),
-        ("Название курса", {
-            'fields': ('name_kg', 'name_ru')
-        }),
-        ("Описание курса", {
-            'fields': ('description_kg', 'description_ru')
+        ('Заполнить если курс онлайн.', {
+            'fields': (
+                'registration_link',
+                'start',
+                'link_to_video'
+            )
         })
     )
     inlines = (
         ProgramItemInline,
-        ScheduleItemInline,
-        MaterialsInline,
-        VideoLessonsInline
     )
 
 

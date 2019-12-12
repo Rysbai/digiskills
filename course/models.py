@@ -106,14 +106,17 @@ class Course(models.Model):
         choices=LANGUAGE_CHOICES,
         verbose_name='Язык проведения'
     )
-    name_kg = models.CharField(max_length=COURSE_NAME_MAX_LENGTH, verbose_name='На кыргызском', null=True)
-    name_ru = models.CharField(max_length=COURSE_NAME_MAX_LENGTH, verbose_name='На русском', null=True)
-    description_kg = models.TextField(verbose_name='На кыргызском', blank=True)
-    description_ru = models.TextField(verbose_name='На русском', blank=True)
+    name = models.CharField(max_length=COURSE_NAME_MAX_LENGTH, verbose_name='Название')
+    description = models.TextField(verbose_name='Описание')
     image = models.ImageField(upload_to='course/', verbose_name='Изображение')
-    registration_link = models.CharField(max_length=CATEGORY_NAME_MAX_LENGTH, verbose_name='Ссылка на регистрацию')
-    start = models.DateField(verbose_name='Начало')
-    end = models.DateField(verbose_name='Конец')
+    isOnline = models.BooleanField(default=False, verbose_name='Этот курс онлайн?')
+    registration_link = models.CharField(
+        max_length=LINKS_MAX_LENGTH,
+        verbose_name='Ссылка на регистрацию',
+        null=True
+    )
+    start = models.DateTimeField(verbose_name='Начало трансляции', null=True)
+    link_to_video = models.CharField(max_length=LINKS_MAX_LENGTH, verbose_name='Ссылка на трансляцию', null=True)
     available = models.BooleanField(verbose_name='Опубликовать', default=False)
 
     def image_tag(self):
@@ -123,7 +126,7 @@ class Course(models.Model):
     image_tag.allow_tags = True
 
     def __str__(self):
-        return self.name_ru or self.name_kg
+        return self.name
 
     class Meta:
         ordering = ('-id', )
@@ -164,45 +167,12 @@ class Course(models.Model):
         return uploaded_image
 
 
-class ScheduleItem(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    day = models.IntegerField(choices=DAYS_OF_WEEK, verbose_name='День недели')
-    time = models.TimeField(verbose_name='Время')
-
-    class Meta:
-        verbose_name = 'Пункт'
-        verbose_name_plural = 'Расписание курса'
-
-
 class ProgramItem(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    number = models.PositiveIntegerField(verbose_name='Номер', unique=True)
     title = models.CharField(max_length=PROGRAM_ITEM_TITLE_MAX_LENGTH, verbose_name='Название')
-
-    def __str__(self):
-        return self.title
+    content = models.TextField(verbose_name='Контент')
 
     class Meta:
         verbose_name = 'Пункт'
         verbose_name_plural = 'Программы курса'
-
-
-class Material(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    description_kg = models.CharField(max_length=500, verbose_name='Описание(Kg)', null=True)
-    description_ru = models.CharField(max_length=500, verbose_name='Описание(Ru)', null=True)
-    link = models.CharField(max_length=CATEGORY_NAME_MAX_LENGTH, verbose_name='Ссылка')
-
-    class Meta:
-        verbose_name = 'Материал'
-        verbose_name_plural = 'Материалы круса'
-
-
-class VideoLesson(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    description_kg = models.CharField(max_length=500, verbose_name='Описание(Kg)', null=True)
-    description_ru = models.CharField(max_length=500, verbose_name='Описание(Ru)', null=True)
-    link = models.CharField(max_length=CATEGORY_NAME_MAX_LENGTH, verbose_name='Ссылка')
-
-    class Meta:
-        verbose_name = 'Видео курса'
-        verbose_name_plural = 'Видео курса'
