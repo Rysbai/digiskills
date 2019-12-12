@@ -148,7 +148,7 @@ class Course(models.Model):
         image_size = (960, 540)
         image_temproary = Image.open(image)
         output_io_stream = BytesIO()
-        image_format = "JPEG" if image.name.split('.')[-1] == 'jpg' else image.name.split('.')[-1]
+        image_format = "JPEG" if image.name.split('.')[-1].lower() == 'jpg' else image.name.split('.')[-1]
 
         image_temproary_resized = image_temproary.resize(image_size, Image.ANTIALIAS)
         image_temproary_resized.save(output_io_stream, format=image_format)
