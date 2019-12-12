@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_summernote',
     'django_extensions',
+    'django_cleanup.apps.CleanupConfig',
 
     'course.apps.CourseConfig',
     'news.apps.NewsConfig',
