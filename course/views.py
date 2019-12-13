@@ -23,7 +23,7 @@ class CategoryView(APIView):
         if pk:
             try:
                 instance = self.queryset.get(id=pk)
-            except Course.DoesNotExist:
+            except self.queryset.model.DoesNotExist:
                 raise Http404
             else:
                 serializer = self.serializer_class(instance, lang=lang)
@@ -42,7 +42,7 @@ class TeacherView(APIView):
         if pk:
             try:
                 instance = self.queryset.get(id=pk)
-            except Teacher.DoesNotExist:
+            except self.queryset.model.DoesNotExist:
                 raise Http404
             else:
                 serializer = self.serializer_class(instance, lang=lang)
@@ -61,7 +61,7 @@ class CourseView(APIView):
         if pk:
             try:
                 instance = self.queryset.get(id=pk)
-            except Course.DoesNotExist:
+            except self.queryset.model.DoesNotExist:
                 raise Http404
             else:
                 serializer = self.serializer_class(instance)
@@ -70,12 +70,13 @@ class CourseView(APIView):
         teacher_id = request.query_params.get('teacher_id', None)
         lang = request.query_params.get('lang', None)
 
+        instances = self.queryset.all()
         if teacher_id:
-            self.queryset = self.queryset.filter(teacher_id=teacher_id)
+            instances = instances.filter(teacher_id=teacher_id)
         if lang:
-            self.queryset = self.queryset.filter(language=lang)
+            instances = instances.filter(language=lang)
 
-        serializer = self.serializer_class(self.queryset.all(), many=True)
+        serializer = self.serializer_class(instances, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
