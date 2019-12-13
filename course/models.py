@@ -169,7 +169,7 @@ class Course(models.Model):
 
 class ProgramItem(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    number = models.PositiveIntegerField(verbose_name='Номер', unique=True)
+    number = models.PositiveIntegerField(verbose_name='Номер')
     title = models.CharField(max_length=PROGRAM_ITEM_TITLE_MAX_LENGTH, verbose_name='Название')
     content = models.TextField(verbose_name='Контент')
 

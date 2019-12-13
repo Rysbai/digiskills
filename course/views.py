@@ -58,23 +58,24 @@ class CourseView(APIView):
     serializer_class = CourseSerializer
 
     def get(self, request, pk=None, *args, **kwargs):
-        lang = request.query_params.get('lang', None)
         if pk:
             try:
                 instance = self.queryset.get(id=pk)
             except Course.DoesNotExist:
                 raise Http404
             else:
-                serializer = self.serializer_class(instance, lang=lang)
+                serializer = self.serializer_class(instance)
                 return Response(data=serializer.data, status=status.HTTP_200_OK)
 
         teacher_id = request.query_params.get('teacher_id', None)
-        if teacher_id:
-            instances = self.queryset.filter(teacher_id=teacher_id)
-        else:
-            instances = self.queryset.filter()
+        lang = request.query_params.get('lang', None)
 
-        serializer = self.serializer_class(instances, lang=lang, many=True)
+        if teacher_id:
+            self.queryset = self.queryset.filter(teacher_id=teacher_id)
+        if lang:
+            self.queryset = self.queryset.filter(language=lang)
+
+        serializer = self.serializer_class(self.queryset.all(), many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 

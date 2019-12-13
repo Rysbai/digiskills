@@ -36,9 +36,6 @@ class TeacherSerializer(Serializer):
 
 
 class CourseSerializer(Serializer):
-    def __init__(self, *args, lang=None, **kwargs):
-        self.lang = lang
-        super(Serializer, self).__init__(*args, **kwargs)
 
     def to_representation(self, instance):
         return {
@@ -52,7 +49,7 @@ class CourseSerializer(Serializer):
             'isOnline': instance.isOnline,
             'registration_link': instance.registration_link,
             'start': instance.start,
-            'link_to_video': instance.end,
+            'link_to_video': instance.link_to_video,
             'available': instance.available
         }
 
