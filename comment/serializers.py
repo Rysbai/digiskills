@@ -11,5 +11,4 @@ class CommentSerializers(serializers.ModelSerializer):
             'name',
             'phone',
             'text',
-            'available'
         )
