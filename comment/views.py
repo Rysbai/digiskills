@@ -4,7 +4,7 @@ from rest_framework import status
 
 from comment.models import Comment
 from comment.serializers import CommentSerializers
-from digiskills.celery import send_comment_to_admin_email
+from comment.utils import send_comment_to_admin_email
 
 
 class CommentViews(APIView):
@@ -21,6 +21,6 @@ class CommentViews(APIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        send_comment_to_admin_email.delay(serializer.data)
+        send_comment_to_admin_email(serializer.data)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
