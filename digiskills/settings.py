@@ -24,7 +24,8 @@ INSTALLED_APPS = [
     'course.apps.CourseConfig',
     'news.apps.NewsConfig',
     'contacts.apps.ContactsConfig',
-    'aboutus.apps.AboutusConfig'
+    'aboutus.apps.AboutusConfig',
+    'comment.apps.CommentConfig'
 ]
 
 MIDDLEWARE = [
@@ -114,3 +115,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = config('SMTP_HOST')
+EMAIL_PORT = config('SMTP_PORT')
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config('SMTP_LOGIN')
+EMAIL_HOST_PASSWORD = config('SMTP_PASSWORD')
+
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
