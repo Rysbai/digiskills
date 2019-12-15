@@ -1,5 +1,8 @@
 import os
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 from decouple import config, Csv
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('SECRET_KEY')
@@ -125,3 +128,9 @@ EMAIL_HOST_PASSWORD = config('SMTP_PASSWORD')
 
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+sentry_sdk.init(
+    dsn="https://393f4aea48b94ed680d0e0eb0c600fbb@sentry.io/1857344",
+    integrations=[DjangoIntegration()]
+)

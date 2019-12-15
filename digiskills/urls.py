@@ -3,7 +3,12 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 
+def gen_error(request):
+    num = 1/0
+
+
 urlpatterns = [
+    path('sentry-debug/', gen_error),
     path('api/course/', include('course.urls')),
     path('api/news/', include('news.urls')),
     path('api/contacts/', include('contacts.urls')),
