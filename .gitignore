@@ -2,6 +2,7 @@
 staticfiles/*
 media/*
 static/*
+back_static/*
 .idea/*
 *.pyc
 .env
