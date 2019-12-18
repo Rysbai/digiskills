@@ -12,7 +12,7 @@ class NewsAdmin(SummernoteModelAdmin):
     def image_tag(admin, obj):
         return mark_safe('<img src="/media/{}" width="50%", height="50%" >'.format(obj.image))
 
-    image_tag.short_description = 'Изображение'
+    image_tag.short_description = 'Изображение (соотношение 16:9)'
     image_tag.allow_tags = True
 
     summernote_fields = ('description_kg', 'description_ru')
