@@ -14,59 +14,63 @@ from course.serializers import CategorySerializer,\
     ProgramItemSerializer
 
 
-class CategoryView(APIView):
+class CategoryListView(APIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-    def get(self, request, pk=None,  *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         lang = request.query_params.get('lang', None)
-        if pk:
-            try:
-                instance = self.queryset.get(id=pk)
-            except self.queryset.model.DoesNotExist:
-                raise Http404
-            else:
-                serializer = self.serializer_class(instance, lang=lang)
-                return Response(data=serializer.data, status=status.HTTP_200_OK)
 
         serializer = self.serializer_class(self.queryset.all(), lang=lang, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
-class TeacherView(APIView):
+class CategoryDetailView(APIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+    def get(self, request, pk=None,  *args, **kwargs):
+        lang = request.query_params.get('lang', None)
+        try:
+            instance = self.queryset.get(id=pk)
+        except self.queryset.model.DoesNotExist:
+            raise Http404
+        else:
+            serializer = self.serializer_class(instance, lang=lang)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class TeacherListView(APIView):
     queryset = Teacher.objects.all()
     serializer_class = TeacherSerializer
 
     def get(self, request, pk=None, *args, **kwargs):
         lang = request.query_params.get('lang', None)
-        if pk:
-            try:
-                instance = self.queryset.get(id=pk)
-            except self.queryset.model.DoesNotExist:
-                raise Http404
-            else:
-                serializer = self.serializer_class(instance, lang=lang)
-                return Response(data=serializer.data, status=status.HTTP_200_OK)
-
         instances = self.queryset.all()
-        serializer = self.serializer_class(instances,lang=lang, many=True)
+        serializer = self.serializer_class(instances, lang=lang, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
-class CourseView(APIView):
+class TeacherDetailView(APIView):
+    queryset = Teacher.objects.all()
+    serializer_class = TeacherSerializer
+
+    def get(self, request, pk=None, *args, **kwargs):
+        lang = request.query_params.get('lang', None)
+        try:
+            instance = self.queryset.get(id=pk)
+        except self.queryset.model.DoesNotExist:
+            raise Http404
+        else:
+            serializer = self.serializer_class(instance, lang=lang)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class CourseListView(APIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
-    def get(self, request, pk=None, *args, **kwargs):
-        if pk:
-            try:
-                instance = self.queryset.get(id=pk)
-            except self.queryset.model.DoesNotExist:
-                raise Http404
-            else:
-                serializer = self.serializer_class(instance)
-                return Response(data=serializer.data, status=status.HTTP_200_OK)
-
+    def get(self, request, *args, **kwargs):
         teacher_id = request.query_params.get('teacher_id', None)
         lang = request.query_params.get('lang', None)
 
@@ -78,6 +82,20 @@ class CourseView(APIView):
 
         serializer = self.serializer_class(instances, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class CourseDetailView(APIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+
+    def get(self, request, pk=None, *args, **kwargs):
+        try:
+            instance = self.queryset.get(id=pk)
+        except self.queryset.model.DoesNotExist:
+            raise Http404
+        else:
+            serializer = self.serializer_class(instance)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
 class ProgramItemView(APIView):
