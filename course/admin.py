@@ -1,3 +1,4 @@
+from django.utils.safestring import mark_safe
 from django_summernote.admin import SummernoteModelAdmin, SummernoteInlineModelAdmin
 from django_summernote.utils import get_attachment_model
 from django.contrib import admin
@@ -14,6 +15,12 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class TeacherAdmin(admin.ModelAdmin):
+    def image_tag(admin, obj):
+        return mark_safe('<img src="/media/{}" width="50%", height="50%" >'.format(obj.image))
+
+    image_tag.short_description = 'Изображение'
+    image_tag.allow_tags = True
+
     readonly_fields = ('image_tag',)
     list_display = ('__str__', )
     fields = ('name', 'surname', 'position', 'language', 'about_ru', 'about_kg', 'image', 'image_tag')
@@ -26,6 +33,12 @@ class ProgramItemInline(admin.StackedInline, SummernoteInlineModelAdmin):
 
 
 class CourseAdmin(SummernoteModelAdmin):
+    def image_tag(admin, obj):
+        return mark_safe('<img src="/media/{}" width="50%", height="50%" >'.format(obj.image))
+
+    image_tag.short_description = 'Изображение'
+    image_tag.allow_tags = True
+
     summernote_fields = ''
     readonly_fields = ('image_tag', )
     fieldsets = (

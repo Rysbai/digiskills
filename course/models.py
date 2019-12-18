@@ -51,12 +51,6 @@ class Teacher(models.Model):
     about_ru = models.TextField(verbose_name='О препод. на русском', null=True)
     image = models.ImageField(upload_to='teacher/', verbose_name='Изображение')
 
-    def image_tag(self):
-        return mark_safe('<img src="/media/{}" width="50%", height="50%" >'.format(self.image))
-
-    image_tag.short_description = 'Изображение'
-    image_tag.allow_tags = True
-
     def __str__(self):
         return self.name + ' ' + self.surname
 
@@ -118,12 +112,6 @@ class Course(models.Model):
     start = models.DateTimeField(verbose_name='Начало трансляции', null=True)
     link_to_video = models.CharField(max_length=LINKS_MAX_LENGTH, verbose_name='Ссылка на трансляцию', null=True)
     available = models.BooleanField(verbose_name='Опубликовать', default=False)
-
-    def image_tag(self):
-        return mark_safe('<img src="/media/{}" width="50%", height="50%" >'.format(self.image))
-
-    image_tag.short_description = 'Превю изображения(можно видеть после сохранения)'
-    image_tag.allow_tags = True
 
     def __str__(self):
         return self.name

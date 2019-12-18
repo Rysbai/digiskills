@@ -19,12 +19,6 @@ class News(models.Model):
     views = models.PositiveIntegerField(default=0, verbose_name='Просмотры')
     pub_date = models.DateTimeField(verbose_name='Дата публикации')
 
-    def image_tag(self):
-        return mark_safe('<img src="/media/{}" width="50%", height="50%" >'.format(self.image))
-
-    image_tag.short_description = 'Изображение'
-    image_tag.allow_tags = True
-
     def __str__(self):
         return self.title_ru or self.title_kg
 
