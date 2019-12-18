@@ -17,7 +17,7 @@ class News(models.Model):
     description_ru = models.TextField(verbose_name='На русском', blank=True)
     image = models.ImageField(upload_to='news/', verbose_name='Изображение')
     views = models.PositiveIntegerField(default=0, verbose_name='Просмотры')
-    pub_date = models.DateTimeField(default=datetime.now(), verbose_name='Дата публикации')
+    pub_date = models.DateTimeField(verbose_name='Дата публикации')
 
     def image_tag(self):
         return mark_safe('<img src="/media/{}" width="50%", height="50%" >'.format(self.image))
