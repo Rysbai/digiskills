@@ -2,7 +2,6 @@ import sys
 from PIL import Image
 from io import BytesIO
 from django.db import models
-from django.utils.safestring import mark_safe
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 CATEGORY_NAME_MAX_LENGTH = 200
@@ -58,18 +57,8 @@ class Teacher(models.Model):
         verbose_name = 'Преподователь'
         verbose_name_plural = 'Преподователи'
 
-    def __init__(self, *args, **kwargs):
-        super(Teacher, self).__init__(*args, **kwargs)
-        self._past_image = self.image
-
     def save(self, *args, **kwargs):
-        is_create = False
-        if self._state.adding:
-            is_create = True
-        if is_create or self._past_image != self.image:
-            self.image = self.compress_image(self.image)
-            self._past_image = self.image
-
+        self.image = self.compress_image(self.image)
         super().save(*args, **kwargs)
 
     def compress_image(self, image):
@@ -121,18 +110,8 @@ class Course(models.Model):
         verbose_name = 'Курс'
         verbose_name_plural = 'Курсы'
 
-    def __init__(self, *args, **kwargs):
-        super(Course, self).__init__(*args, **kwargs)
-        self._past_image = self.image
-
     def save(self, *args, **kwargs):
-        is_create = False
-        if self._state.adding:
-            is_create = True
-        if is_create or self._past_image != self.image:
-            self.image = self.compress_image(self.image)
-            self._past_image = self.image
-
+        self.image = self.compress_image(self.image)
         super().save(*args, **kwargs)
 
     def compress_image(self, image):

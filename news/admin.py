@@ -2,13 +2,10 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django_summernote.admin import SummernoteModelAdmin
 
-from news.forms import NewsForm
 from news.models import News
 
 
 class NewsAdmin(SummernoteModelAdmin):
-    form = NewsForm
-
     def image_tag(admin, obj):
         return mark_safe('<img src="/media/{}" width="50%", height="50%" >'.format(obj.image))
 
