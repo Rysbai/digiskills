@@ -8,8 +8,8 @@ class Comment(models.Model):
     available = models.BooleanField(default=False, verbose_name='Опубликовать')
 
     class Meta:
-        verbose_name = 'Комментарий'
-        verbose_name_plural = 'Комментарии'
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'
 
     def __str__(self):
         return self.name
