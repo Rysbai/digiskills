@@ -7,8 +7,9 @@ from news.models import News
 
 class NewsAdmin(SummernoteModelAdmin):
     def image_tag(admin, obj):
-        return mark_safe('<img src="/media/{}" width="50%", height="50%" >'.format(obj.image))
-
+        if obj.image:
+            return mark_safe('<img src="/media/{}" width="50%", height="50%" >'.format(obj.image))
+        return '-'
     image_tag.short_description = 'Изображение (соотношение 16:9)'
     image_tag.allow_tags = True
 

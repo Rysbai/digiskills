@@ -16,7 +16,9 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class TeacherAdmin(admin.ModelAdmin):
     def image_tag(admin, obj):
-        return mark_safe('<img src="/media/{}" width="50%", height="50%" >'.format(obj.image))
+        if obj.image:
+            return mark_safe('<img src="/media/{}" width="50%", height="50%" >'.format(obj.image))
+        return '-'
 
     image_tag.short_description = 'Изображение (соотношение 1:1)'
     image_tag.allow_tags = True
@@ -34,7 +36,9 @@ class ProgramItemInline(admin.StackedInline, SummernoteInlineModelAdmin):
 
 class CourseAdmin(SummernoteModelAdmin):
     def image_tag(admin, obj):
-        return mark_safe('<img src="/media/{}" width="50%", height="50%" >'.format(obj.image))
+        if obj.image:
+            return mark_safe('<img src="/media/{}" width="50%", height="50%" >'.format(obj.image))
+        return '-'
 
     image_tag.short_description = 'Изображение (соотношение 16:9)'
     image_tag.allow_tags = True
