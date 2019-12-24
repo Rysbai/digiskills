@@ -71,12 +71,15 @@ class CourseListView(APIView):
     serializer_class = CourseSerializer
 
     def get(self, request, *args, **kwargs):
+        category_id = request.query_params.get('category_id', None)
         teacher_id = request.query_params.get('teacher_id', None)
         lang = request.query_params.get('lang', None)
 
         instances = self.queryset.all()
         if teacher_id:
             instances = instances.filter(teacher_id=teacher_id)
+        if category_id:
+            instances = instances.filter(category_id=category_id)
         if lang:
             instances = instances.filter(language=lang)
 
