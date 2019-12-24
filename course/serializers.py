@@ -43,6 +43,7 @@ class CourseSerializer(Serializer):
         return {
             'id': instance.id,
             'category_id': instance.category_id,
+            'category_name': instance.category.name_kg if instance.language == 'kg' else instance.category.name_ru,
             'teacher_id': instance.teacher_id,
             'language': instance.language,
             'name': instance.name,
