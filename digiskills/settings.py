@@ -9,6 +9,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = (config('DEBUG') == 'True')
 
 ALLOWED_HOSTS = ['64.225.36.157', '127.0.0.1', 'digiskills.kg', 'www.digiskills.kg']
+CORS_ORIGIN_ALLOW_ALL = True
 HOST_NAME = config('HOST_NAME')
 PORT = config('PORT')
 SSL_SECURED = (config('SSL_SECURED') == 'True')
@@ -21,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'corsheaders',
     'rest_framework',
     'django_summernote',
     'django_extensions',
@@ -36,6 +38,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
