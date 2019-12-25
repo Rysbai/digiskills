@@ -1,6 +1,8 @@
 import sys
 from PIL import Image
 from io import BytesIO
+
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
@@ -96,10 +98,11 @@ class Course(models.Model):
     registration_link = models.CharField(
         max_length=LINKS_MAX_LENGTH,
         verbose_name='Ссылка на регистрацию',
-        null=True
+        null=True,
+        blank=True
     )
-    start = models.DateTimeField(verbose_name='Начало трансляции', null=True)
-    link_to_video = models.CharField(max_length=LINKS_MAX_LENGTH, verbose_name='Ссылка на трансляцию', null=True)
+    start = models.DateTimeField(verbose_name='Начало трансляции', null=True, blank=True)
+    link_to_video = models.CharField(max_length=LINKS_MAX_LENGTH, verbose_name='Ссылка на трансляцию', null=True, blank=True)
     available = models.BooleanField(verbose_name='Опубликовать', default=False)
 
     def __str__(self):
@@ -109,6 +112,13 @@ class Course(models.Model):
         ordering = ('-id', )
         verbose_name = 'Курс'
         verbose_name_plural = 'Курсы'
+
+    def clean(self):
+        if self.isOnline:
+            if not self.registration_link:
+                raise ValidationError('Вы отметили что курс онлайн. Но не заполнили ссылку на регистрацию.')
+            if not self.start:
+                raise ValidationError('Вы отметили что курс онлайн. Но не заполнили дата и время начало трансляции.')
 
     def save(self, *args, **kwargs):
         self.image = self.compress_image(self.image)
