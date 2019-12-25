@@ -9,6 +9,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = (config('DEBUG') == 'True')
 
 ALLOWED_HOSTS = ['64.225.36.157', '127.0.0.1', 'digiskills.kg', 'www.digiskills.kg']
+CORS_ORIGIN_ALLOW_ALL = True
 HOST_NAME = config('HOST_NAME')
 PORT = config('PORT')
 SSL_SECURED = (config('SSL_SECURED') == 'True')
