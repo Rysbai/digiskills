@@ -12,12 +12,19 @@ class NewsListView(APIView):
     queryset = News.objects.filter(pub_date__lte=datetime.now())
     serializer_class = NewsSerializer
 
-    def get(self, request, pk=None, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         lang = request.query_params.get('lang', None)
+        page = int(request.query_params.get('page', '0'))
+        count = int(request.query_params.get('count', '10'))
+        instance_slice = slice(page*count, page*count+count)
 
-        instances = self.queryset.all()
+        instances = self.queryset.all()[instance_slice]
         serializer = self.serializer_class(instances, lang=lang, many=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+        data = {
+            'total': len(self.queryset.all()),
+            'data': serializer.data
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
 
 
 class NewsDetailView(APIView):
