@@ -74,6 +74,9 @@ class CourseListView(APIView):
         category_id = request.query_params.get('category_id', None)
         teacher_id = request.query_params.get('teacher_id', None)
         lang = request.query_params.get('lang', None)
+        page = int(request.query_params.get('page', '0'))
+        count = int(request.query_params.get('count', '10'))
+        instance_slice = slice(page*count, page*count+count)
 
         instances = self.queryset.all()
         if teacher_id:
@@ -84,7 +87,11 @@ class CourseListView(APIView):
             instances = instances.filter(language=lang)
 
         serializer = self.serializer_class(instances, many=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+        data = {
+            'total': len(serializer.data),
+            'data': serializer.data[instance_slice]
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
 
 
 class CourseDetailView(APIView):
