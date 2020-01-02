@@ -21,6 +21,6 @@ class CommentViews(APIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        utils.send_comment_to_admin_email(serializer.data)
+        utils.send_comment_to_admin_email(**serializer.data)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
