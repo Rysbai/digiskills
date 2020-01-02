@@ -1,17 +1,9 @@
 from django.core.exceptions import ValidationError
 from rest_framework import status
 from django.test import TestCase
-from factory import DjangoModelFactory
 
+from aboutus.factory import AboutUsFactory
 from aboutus.models import AboutUs
-
-
-class AboutUsFactory(DjangoModelFactory):
-    class Meta:
-        model = AboutUs
-
-    payload_kg = 'Example payload in kyrgyz'
-    payload_ru = 'Example payload in russian'
 
 
 class AboutUsModelTest(TestCase):

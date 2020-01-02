@@ -1,28 +1,10 @@
 from rest_framework import status
 from unittest import mock
 from django.test import TestCase
-from factory import DjangoModelFactory
 
-from comment.models import Comment
 from comment.serializers import CommentSerializers
 from comment import utils
-
-
-class CommentFactory(DjangoModelFactory):
-    class Meta:
-        model = Comment
-
-    name = 'Example name'
-    phone = 'Example phone'
-    text = 'Example text'
-    available = True
-
-    @staticmethod
-    def create_many(count=3):
-        comments = []
-        for i in range(count):
-            comments.append(CommentFactory())
-        return comments
+from comment.factory import CommentFactory
 
 
 class CommentAPITest(TestCase):
@@ -63,5 +45,3 @@ class CommentAPITest(TestCase):
         self.client.post(path, data=data, content_type='application/json')
 
         utils.send_comment_to_admin_email.assert_called_once()
-
-
