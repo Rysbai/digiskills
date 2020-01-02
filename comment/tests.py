@@ -1,4 +1,3 @@
-import json
 from rest_framework import status
 from unittest import mock
 from django.test import TestCase
@@ -32,7 +31,7 @@ class CommentAPITest(TestCase):
         comments = CommentFactory.create_many()
 
         response = self.client.get(path)
-        body = json.loads(response.content.decode())
+        body = response.json()
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(body, CommentSerializers(comments, many=True).data)
@@ -46,7 +45,7 @@ class CommentAPITest(TestCase):
         }
 
         response = self.client.post(path, data=data, content_type='application/json')
-        body = json.loads(response.content.decode())
+        body = response.json()
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(body['name'], data['name'])

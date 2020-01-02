@@ -1,4 +1,3 @@
-import json
 from django.core.exceptions import ValidationError
 from rest_framework import status
 from django.test import TestCase
@@ -31,7 +30,7 @@ class AboutUsAPITest(TestCase):
         path = '/api/aboutus/'
 
         response = self.client.get(path)
-        data = json.loads(response.content.decode())
+        data = response.json()
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data['payload'], aboutus.payload_kg)
@@ -41,7 +40,7 @@ class AboutUsAPITest(TestCase):
         path = '/api/aboutus/?lang=ru'
 
         response = self.client.get(path)
-        data = json.loads(response.content.decode())
+        data = response.json()
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data['payload'], aboutus.payload_ru)
