@@ -34,14 +34,14 @@ class CommentAPITest(TestCase):
         self.assertEqual(body['phone'], data['phone'])
         self.assertEqual(body['text'], data['text'])
 
-    def test_should_send_mail_to_admin(self):
+    @mock.patch('comment.utils.send_comment_to_admin_email')
+    def test_should_send_mail_to_admin(self, mocked_send_comment_to_admin_email):
         path = '/api/comments/'
         data = {
             'name': 'Example name',
             'phone': '+996779583738',
             'text': 'Some comments here'
         }
-        utils.send_comment_to_admin_email = mock.Mock(return_value=None)
         self.client.post(path, data=data, content_type='application/json')
 
-        utils.send_comment_to_admin_email.assert_called_once()
+        mocked_send_comment_to_admin_email.assert_called_once()
