@@ -7,6 +7,24 @@ from course.models import Category, Teacher, Course, ProgramItem, LANGUAGE_CHOIC
 
 
 @factory.django.mute_signals(post_save)
+class ProgramItemFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = ProgramItem
+
+    course = factory.SubFactory('course.factories.CourseFactory', program_item=None)
+    number = 1
+    title = 'Example program item title'
+    content = 'Example program item content'
+
+    @staticmethod
+    def create_many(course, number=1, count=3):
+        program_items = []
+        for i in range(count):
+            program_items.append(ProgramItemFactory(course=course, number=number))
+        return program_items
+
+
+@factory.django.mute_signals(post_save)
 class CourseFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Course

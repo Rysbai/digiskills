@@ -1,8 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from course.factories import CourseFactory, CategoryFactory, TeacherFactory
-from course.models import Course
+from course.factories import CourseFactory, CategoryFactory, TeacherFactory, ProgramItemFactory
+from course.models import Course, ProgramItem
 from course.serializers import CategorySerializer, CourseSerializer, TeacherSerializer
 from utils.get_absolute_url import get_media_absolute_url
 
@@ -117,6 +117,7 @@ class TeacherAPITest(TestCase):
 
 class CourseAPITest(TestCase):
     def assert_equal_course(self, body: dict, course_orm: Course):
+        self.assertEqual(body['id'], course_orm.id)
         self.assertEqual(body['teacher_id'], course_orm.teacher_id)
         self.assertEqual(body['category_id'], course_orm.category_id)
         self.assertEqual(body['language'], course_orm.language)
@@ -206,6 +207,55 @@ class CourseAPITest(TestCase):
         self.assertEqual(data['total'], 1)
         self.assert_equal_course(data['data'][0], course)
 
+    def test_should_return_10_courses_by_default(self):
+        courses = CourseFactory.create_many(
+            CategoryFactory(course=None),
+            TeacherFactory(course=None),
+            language='ru',
+            count=11
+        )
+        path = reverse('course:course_list')
+
+        response = self.client.get(path)
+        data = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['total'], len(courses))
+        self.assertEqual(len(data['data']), 10)
+
+    def test_should_return_first_page_by_default(self):
+        courses = CourseFactory.create_many(
+            CategoryFactory(course=None),
+            TeacherFactory(course=None),
+            language='ru',
+            count=11
+        )
+        path = reverse('course:course_list')
+
+        response = self.client.get(path)
+        data = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['total'], len(courses))
+        self.assertEqual(len(data['data']), 10)
+
+    def test_should_return_page_and_count_i_want(self):
+        page, count = 1, 5
+        courses = CourseFactory.create_many(
+            CategoryFactory(course=None),
+            TeacherFactory(course=None),
+            language='ru',
+            count=(page + 1) * count - 1 #for create -1 course for second page
+        )
+        path = reverse('course:course_list') + '?page={0}&count={1}'.format(page, count)
+
+        response = self.client.get(path)
+        data = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['total'], len(courses))
+        self.assertEqual(len(data['data']), len(courses) - count)
+
     def test_should_return_course_by_id(self):
         category = CategoryFactory(course=None)
         teacher = TeacherFactory(course=None)
@@ -217,3 +267,55 @@ class CourseAPITest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assert_equal_course(data, course)
+
+    def test_should_return_404_if_course_not_found(self):
+        doesnt_exist_course_id = 12345678
+        path = reverse('course:course_detail', args=[doesnt_exist_course_id])
+
+        response = self.client.get(path)
+
+        self.assertEqual(response.status_code, 404)
+
+
+class ProgramAPITest(TestCase):
+    def assert_equal_program_items(self, body: dict, program_item_orm: ProgramItem):
+        self.assertEqual(body['id'], program_item_orm.id)
+        self.assertEqual(body['course_id'], program_item_orm.course_id)
+        self.assertEqual(body['number'], program_item_orm.number)
+        self.assertEqual(body['title'], program_item_orm.title)
+        self.assertEqual(body['content'], program_item_orm.content)
+
+    def test_should_return_all_program_items(self):
+        category = CategoryFactory(course=None)
+        teacher = TeacherFactory(course=None)
+        course = CourseFactory(category=category, teacher=teacher)
+        program_items = ProgramItemFactory.create_many(course=course)
+
+        path = reverse('course:program_list')
+
+        response = self.client.get(path)
+        data = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        for i in range(len(program_items)-1):
+            self.assert_equal_program_items(data[i], program_items[i])
+
+    def test_should_return_filtered_program_items_by_course_id(self):
+        category = CategoryFactory(course=None)
+        teacher = TeacherFactory(course=None)
+        course = CourseFactory(category=category, teacher=teacher)
+        program_items_by_another_course = ProgramItemFactory.create_many(
+            course=CourseFactory(category=category, teacher=teacher)
+        )
+        program_items = ProgramItemFactory.create_many(course=course)
+
+        path = reverse('course:program_list') + '?course_id={}'.format(course.id)
+
+        response = self.client.get(path)
+        data = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(data), len(program_items))
+        for i in range(len(program_items)-1):
+            self.assert_equal_program_items(data[i], program_items[i])
+
