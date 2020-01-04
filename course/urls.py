@@ -10,6 +10,8 @@ CourseListView,
 CourseDetailView,
 ProgramItemView
 )
+
+app_name = 'course'
 urlpatterns = [
     path('categories/', CategoryListView.as_view()),
     path('categories/<int:pk>/', CategoryDetailView.as_view()),

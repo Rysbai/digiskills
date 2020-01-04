@@ -25,14 +25,13 @@ class CourseFactory(factory.django.DjangoModelFactory):
     available = True
 
     @staticmethod
-    def create_many(category, teacher, count=3):
+    def create_many(category, teacher, language='ru', count=3):
         courses = []
         for i in range(count):
             courses.append(
-                CourseFactory(category=category, teacher=teacher)
+                CourseFactory(category=category, teacher=teacher, language=language)
             )
         return courses
-
 
 
 @factory.django.mute_signals(post_save)

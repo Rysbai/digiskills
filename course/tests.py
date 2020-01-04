@@ -114,3 +114,107 @@ class TeacherAPITest(TestCase):
             data,
             TeacherSerializer(teacher, lang='ru').data
         )
+
+
+class CourseAPITest(TestCase):
+    def assert_equal_course(self, body: dict, course_orm: Course):
+        self.assertEqual(body['teacher_id'], course_orm.teacher_id)
+        self.assertEqual(body['category_id'], course_orm.category_id)
+        self.assertEqual(body['language'], course_orm.language)
+        self.assertEqual(body['description'], course_orm.description)
+        self.assertEqual(body['image'], get_media_absolute_url(course_orm.image.url))
+        self.assertEqual(body['isOnline'], course_orm.isOnline)
+        self.assertEqual(body['registration_link'], course_orm.registration_link)
+        # self.assertEqual(body['start'], course_orm.start)
+        self.assertEqual(body['link_to_video'], course_orm.link_to_video)
+        self.assertEqual(body['available'], course_orm.available)
+
+    def test_should_return_all_courses_in_both_of_languages(self):
+        category = CategoryFactory(course=None)
+        teacher = TeacherFactory(course=None)
+        courses = CourseFactory.create_many(category, teacher)
+        courses.reverse()
+        path = '/api/course/courses/'
+
+        response = self.client.get(path)
+        data = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['total'], len(courses))
+        for i in range(len(courses)-1):
+            self.assert_equal_course(data['data'][i], courses[i])
+
+    def test_should_return_all_courses_in_specific_lang_if_lang_query_param_provided(self):
+        category = CategoryFactory(course=None)
+        teacher = TeacherFactory(course=None)
+        courses = CourseFactory.create_many(category, teacher)
+        courses.reverse()
+        path = '/api/course/courses/'
+
+        response = self.client.get(path)
+        data = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['total'], len(courses))
+        for i in range(len(courses)-1):
+            self.assert_equal_course(data['data'][i], courses[i])
+
+    def test_should_return_filtered_courses_by_category_id(self):
+        category = CategoryFactory(course=None)
+        teacher = TeacherFactory(course=None)
+        courses = CourseFactory.create_many(category, teacher)
+        courses.reverse()
+        courses_with_another_category = CourseFactory.create_many(CategoryFactory(course=None), teacher)
+        path = '/api/course/courses/?category_id={}'.format(category.id)
+
+        response = self.client.get(path)
+        data = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['total'], len(courses))
+        for i in range(len(courses)-1):
+            self.assert_equal_course(data['data'][i], courses[i])
+
+    def test_should_return_filtered_courses_by_teacher_id(self):
+        category = CategoryFactory(course=None)
+        teacher = TeacherFactory(course=None)
+        courses = CourseFactory.create_many(category, teacher)
+        courses.reverse()
+        courses_with_another_teacher = CourseFactory.create_many(category, TeacherFactory(course=None))
+        path = '/api/course/courses/?teacher_id={}'.format(teacher.id)
+
+        response = self.client.get(path)
+        data = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['total'], len(courses))
+        for i in range(len(courses)-1):
+            self.assert_equal_course(data['data'][i], courses[i])
+
+    def test_should_return_filtered_courses_by_lang(self):
+        course = CourseFactory(language='kg')
+        courses_in_different_language = CourseFactory.create_many(
+            CategoryFactory(course=None),
+            TeacherFactory(course=None),
+            language='ru'
+        )
+        path = '/api/course/courses/?lang=kg'
+
+        response = self.client.get(path)
+        data = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['total'], 1)
+        self.assert_equal_course(data['data'][0], course)
+
+    def test_should_return_course_by_id(self):
+        category = CategoryFactory(course=None)
+        teacher = TeacherFactory(course=None)
+        course = CourseFactory(category=category, teacher=teacher)
+        path = '/api/course/courses/{}/'.format(course.id)
+
+        response = self.client.get(path)
+        data = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assert_equal_course(data, course)
