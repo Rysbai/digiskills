@@ -1,15 +1,15 @@
+from django.urls import reverse
 from rest_framework import status
 from unittest import mock
 from django.test import TestCase
 
 from comment.serializers import CommentSerializers
-from comment import utils
 from comment.factory import CommentFactory
 
 
 class CommentAPITest(TestCase):
     def test_should_return_list_of_all_comments(self):
-        path = '/api/comments/'
+        path = reverse('comment:comment_list_and_create')
         comments = CommentFactory.create_many()
 
         response = self.client.get(path)
@@ -19,7 +19,7 @@ class CommentAPITest(TestCase):
         self.assertEqual(body, CommentSerializers(comments, many=True).data)
 
     def test_should_create_comment(self):
-        path = '/api/comments/'
+        path = reverse('comment:comment_list_and_create')
         data = {
             'name': 'Example name',
             'phone': '+996779583738',
@@ -36,7 +36,7 @@ class CommentAPITest(TestCase):
 
     @mock.patch('comment.utils.send_comment_to_admin_email')
     def test_should_send_mail_to_admin(self, mocked_send_comment_to_admin_email):
-        path = '/api/comments/'
+        path = reverse('comment:comment_list_and_create')
         data = {
             'name': 'Example name',
             'phone': '+996779583738',

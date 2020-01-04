@@ -13,16 +13,16 @@ ProgramItemView
 
 app_name = 'course'
 urlpatterns = [
-    path('categories/', CategoryListView.as_view()),
-    path('categories/<int:pk>/', CategoryDetailView.as_view()),
+    path('categories/', CategoryListView.as_view(), name='category_list'),
+    path('categories/<int:pk>/', CategoryDetailView.as_view(), name='category_detail'),
 
-    path('teachers/', TeacherListView.as_view()),
-    path('teachers/<int:pk>/', TeacherDetailView.as_view()),
+    path('teachers/', TeacherListView.as_view(), name='teacher_list'),
+    path('teachers/<int:pk>/', TeacherDetailView.as_view(), name='teacher_detail'),
 
-    path('courses/', CourseListView.as_view()),
-    path('courses/<int:pk>/', CourseDetailView.as_view()),
+    path('courses/', CourseListView.as_view(), name='course_list'),
+    path('courses/<int:pk>/', CourseDetailView.as_view(), name='course_detail'),
 
-    path('programs/', ProgramItemView.as_view()),
+    path('programs/', ProgramItemView.as_view(), name='program_list'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

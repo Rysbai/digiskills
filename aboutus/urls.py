@@ -5,7 +5,7 @@ from aboutus.views import AboutUsView
 
 app_name = 'aboutus'
 urlpatterns = [
-    path('', AboutUsView.as_view(), name='aboutus')
+    path('', AboutUsView.as_view(), name='aboutus_list')
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

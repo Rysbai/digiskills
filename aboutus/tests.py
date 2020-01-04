@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.urls import reverse
 from rest_framework import status
 from django.test import TestCase
 
@@ -19,7 +20,7 @@ class AboutUsModelTest(TestCase):
 class AboutUsAPITest(TestCase):
     def test_should_return_about_us_content_in_kyrgyz_by_default(self):
         aboutus = AboutUsFactory()
-        path = '/api/aboutus/'
+        path = reverse('aboutus:aboutus_list')
 
         response = self.client.get(path)
         data = response.json()
@@ -29,7 +30,7 @@ class AboutUsAPITest(TestCase):
 
     def test_should_return_about_us_content_in_russian_with_query_param_lang(self):
         aboutus = AboutUsFactory()
-        path = '/api/aboutus/?lang=ru'
+        path = reverse('aboutus:aboutus_list') + '?lang=ru'
 
         response = self.client.get(path)
         data = response.json()

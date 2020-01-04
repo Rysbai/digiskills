@@ -1,6 +1,5 @@
-import json
-
 from django.test import TestCase
+from django.urls import reverse
 
 from course.factories import CourseFactory, CategoryFactory, TeacherFactory
 from course.models import Course
@@ -11,7 +10,7 @@ from utils.get_absolute_url import get_media_absolute_url
 class CategoryAPITest(TestCase):
     def test_should_return_all_categories_in_kyrgyz_by_default(self):
         categories = CategoryFactory.create_many()
-        path = '/api/course/categories/'
+        path = reverse('course:category_list')
 
         response = self.client.get(path)
         data = response.json()
@@ -24,7 +23,7 @@ class CategoryAPITest(TestCase):
 
     def test_should_return_all_categories_in_russian_if_lang_is_ru(self):
         categories = CategoryFactory.create_many()
-        path = '/api/course/categories/?lang=ru'
+        path = reverse('course:category_list') + '?lang=ru'
 
         response = self.client.get(path)
         data = response.json()
@@ -37,7 +36,7 @@ class CategoryAPITest(TestCase):
 
     def test_should_return_category_by_id_in_kyrgyz_by_default(self):
         category = CategoryFactory()
-        path = '/api/course/categories/{}/'.format(category.id)
+        path = reverse('course:category_detail', args=[category.id])
 
         response = self.client.get(path)
         data = response.json()
@@ -50,7 +49,7 @@ class CategoryAPITest(TestCase):
 
     def test_should_return_category_by_id_in_russian_if_lang_is_ru(self):
         category = CategoryFactory()
-        path = '/api/course/categories/{}/?lang=ru'.format(category.id)
+        path = reverse('course:category_detail', args=[category.id]) + '?lang=ru'
 
         response = self.client.get(path)
         data = response.json()
@@ -65,7 +64,7 @@ class CategoryAPITest(TestCase):
 class TeacherAPITest(TestCase):
     def test_should_return_all_teachers_in_kyrgyz_content_by_default(self):
         teachers = TeacherFactory.create_many()
-        path = '/api/course/teachers/'
+        path = reverse('course:teacher_list')
 
         response = self.client.get(path)
         data = response.json()
@@ -78,7 +77,7 @@ class TeacherAPITest(TestCase):
 
     def test_should_return_all_teachers_in_russian_content_if_lang_is_ru(self):
         teachers = TeacherFactory.create_many()
-        path = '/api/course/teachers/?lang=ru'
+        path = reverse('course:teacher_list') + '?lang=ru'
 
         response = self.client.get(path)
         data = response.json()
@@ -91,7 +90,7 @@ class TeacherAPITest(TestCase):
 
     def test_should_return_teacher_by_id_in_kyrgyz_content_by_default(self):
         teacher = TeacherFactory()
-        path = '/api/course/teachers/{}/'.format(teacher.id)
+        path = reverse('course:teacher_detail', args=[teacher.id])
 
         response = self.client.get(path)
         data = response.json()
@@ -104,7 +103,7 @@ class TeacherAPITest(TestCase):
 
     def test_should_return_teacher_by_id_in_russian_content_if_lang_is_ru(self):
         teacher = TeacherFactory()
-        path = '/api/course/teachers/{}/?lang=ru'.format(teacher.id)
+        path = reverse('course:teacher_detail', args=[teacher.id]) + '?lang=ru'
 
         response = self.client.get(path)
         data = response.json()
@@ -134,7 +133,7 @@ class CourseAPITest(TestCase):
         teacher = TeacherFactory(course=None)
         courses = CourseFactory.create_many(category, teacher)
         courses.reverse()
-        path = '/api/course/courses/'
+        path = reverse('course:course_list')
 
         response = self.client.get(path)
         data = response.json()
@@ -149,7 +148,7 @@ class CourseAPITest(TestCase):
         teacher = TeacherFactory(course=None)
         courses = CourseFactory.create_many(category, teacher)
         courses.reverse()
-        path = '/api/course/courses/'
+        path = reverse('course:course_list')
 
         response = self.client.get(path)
         data = response.json()
@@ -165,7 +164,7 @@ class CourseAPITest(TestCase):
         courses = CourseFactory.create_many(category, teacher)
         courses.reverse()
         courses_with_another_category = CourseFactory.create_many(CategoryFactory(course=None), teacher)
-        path = '/api/course/courses/?category_id={}'.format(category.id)
+        path = reverse('course:course_list') + '?category_id={}'.format(category.id)
 
         response = self.client.get(path)
         data = response.json()
@@ -181,7 +180,7 @@ class CourseAPITest(TestCase):
         courses = CourseFactory.create_many(category, teacher)
         courses.reverse()
         courses_with_another_teacher = CourseFactory.create_many(category, TeacherFactory(course=None))
-        path = '/api/course/courses/?teacher_id={}'.format(teacher.id)
+        path = reverse('course:course_list') + '?teacher_id={}'.format(teacher.id)
 
         response = self.client.get(path)
         data = response.json()
@@ -198,7 +197,7 @@ class CourseAPITest(TestCase):
             TeacherFactory(course=None),
             language='ru'
         )
-        path = '/api/course/courses/?lang=kg'
+        path = reverse('course:course_list') + '?lang=kg'
 
         response = self.client.get(path)
         data = response.json()
@@ -211,7 +210,7 @@ class CourseAPITest(TestCase):
         category = CategoryFactory(course=None)
         teacher = TeacherFactory(course=None)
         course = CourseFactory(category=category, teacher=teacher)
-        path = '/api/course/courses/{}/'.format(course.id)
+        path = reverse('course:course_detail', args=[course.id])
 
         response = self.client.get(path)
         data = response.json()

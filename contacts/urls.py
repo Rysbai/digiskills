@@ -5,7 +5,7 @@ from contacts.views import ContactView
 
 app_name = 'contact'
 urlpatterns = [
-    path('', ContactView.as_view()),
+    path('', ContactView.as_view(), name='contact_list'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
