@@ -5,7 +5,7 @@ from course.models import \
     Course, \
     ProgramItem
 
-from utils.get_absolute_url import get_absolute_url
+from utils.get_absolute_url import get_media_absolute_url
 
 
 class CategorySerializer(Serializer):
@@ -32,7 +32,7 @@ class TeacherSerializer(Serializer):
             'surname': instance.surname,
             'position': instance.position,
             'about': instance.about_ru if instance.about_ru and self.lang == 'ru' else instance.about_kg,
-            'image': get_absolute_url(instance.image.url),
+            'image': get_media_absolute_url(instance.image.url),
             'language': instance.language
         }
 
@@ -48,7 +48,7 @@ class CourseSerializer(Serializer):
             'language': instance.language,
             'name': instance.name,
             'description': instance.description,
-            'image': get_absolute_url(instance.image.url),
+            'image': get_media_absolute_url(instance.image.url),
             'isOnline': instance.isOnline,
             'registration_link': instance.registration_link,
             'start': instance.start,
