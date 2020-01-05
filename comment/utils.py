@@ -1,14 +1,15 @@
 from django.conf import settings
+from django.db.models import Q
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
 
 
-def send_comment_to_admin_email(comment):
-    admin = User.objects.filter(is_superuser=True)[0]
-    subject = 'Комментарий к проекту digiskills от {}'.format(comment['name'])
-    text = 'Комментарий от {}\n'.format(comment['name']) + \
-           'Номер телефона: {}\n'.format(comment['phone']) + \
-           comment['text']
+def send_comment_to_admin_email(name: str, phone: str, text: str, *args, **kwargs):
+    admin = User.objects.filter(~Q(email=''), is_superuser=True).first()
+    subject = 'Комментарий к проекту digiskills от {}'.format(name)
+    text = 'Комментарий от {}\n'.format(name) + \
+           'Номер телефона: {}\n'.format(phone) + \
+           text
 
     try:
         send_mail(

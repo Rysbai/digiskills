@@ -1,6 +1,6 @@
 from rest_framework.serializers import Serializer
 
-from utils.get_absolute_url import get_absolute_url
+from utils.get_absolute_url import get_media_absolute_url
 
 
 class NewsSerializer(Serializer):
@@ -14,7 +14,7 @@ class NewsSerializer(Serializer):
             'title': instance.title_ru if instance.title_ru and self.lang == 'ru' else instance.title_kg,
             'description': instance.description_ru if instance.description_ru and self.lang == 'ru' \
                 else instance.description_kg,
-            'image': get_absolute_url(instance.image.url),
+            'image': get_media_absolute_url(instance.image.url),
             'views': instance.views,
             'pub_date': instance.pub_date
         }
