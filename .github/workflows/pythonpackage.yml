@@ -12,16 +12,16 @@ jobs:
         python-version: [3.7]
 
     steps:
-    env:
-      DEBUG: True
-      SECRET_KEY: kakaka
-      HOST_NAME: 127.0.0.1
-      PORT: 8000
-      SSL_SECURED: False
-      SMTP_HOST: smtp.gmail.com
-      SMTP_PORT: 587
-      SMTP_LOGIN: test@gmail.com
-      SMTP_PASSWORD: asdasdads
+    - env:
+        DEBUG: True
+        SECRET_KEY: kakaka
+        HOST_NAME: 127.0.0.1
+        PORT: 8000
+        SSL_SECURED: False
+        SMTP_HOST: smtp.gmail.com
+        SMTP_PORT: 587
+        SMTP_LOGIN: test@gmail.com
+        SMTP_PASSWORD: asdasdads
       
     - uses: actions/checkout@v1
     - name: Set up Python ${{ matrix.python-version }}
