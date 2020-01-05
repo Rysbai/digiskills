@@ -34,7 +34,7 @@ jobs:
         python manage.py makemigrations
         python manage.py migrate    
       env:
-        DEBUG: True
+        DEBUG: "True"
         SECRET_KEY: kakaka
         HOST_NAME: 127.0.0.1
         PORT: 8000
@@ -47,7 +47,7 @@ jobs:
       run: |
         python manage.py test
       env:
-        DEBUG: True
+        DEBUG: "True"
         SECRET_KEY: kakaka
         HOST_NAME: 127.0.0.1
         PORT: 8000
