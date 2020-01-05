@@ -129,22 +129,7 @@ class CourseAPITest(TestCase):
         self.assertEqual(body['link_to_video'], course_orm.link_to_video)
         self.assertEqual(body['available'], course_orm.available)
 
-    def test_should_return_all_courses_in_both_of_languages(self):
-        category = CategoryFactory(course=None)
-        teacher = TeacherFactory(course=None)
-        courses = CourseFactory.create_many(category, teacher)
-        courses.reverse()
-        path = reverse('course:course_list')
-
-        response = self.client.get(path)
-        data = response.json()
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(data['total'], len(courses))
-        for i in range(len(courses)-1):
-            self.assert_equal_course(data['data'][i], courses[i])
-
-    def test_should_return_all_courses_in_specific_lang_if_lang_query_param_provided(self):
+    def test_should_return_max_10_last_courses_by_default(self):
         category = CategoryFactory(course=None)
         teacher = TeacherFactory(course=None)
         courses = CourseFactory.create_many(category, teacher)
@@ -191,7 +176,7 @@ class CourseAPITest(TestCase):
         for i in range(len(courses)-1):
             self.assert_equal_course(data['data'][i], courses[i])
 
-    def test_should_return_filtered_courses_by_lang(self):
+    def test_should_return_filtered_courses_by_language(self):
         course = CourseFactory(language='kg')
         courses_in_different_language = CourseFactory.create_many(
             CategoryFactory(course=None),
@@ -207,7 +192,7 @@ class CourseAPITest(TestCase):
         self.assertEqual(data['total'], 1)
         self.assert_equal_course(data['data'][0], course)
 
-    def test_should_return_10_courses_by_default(self):
+    def test_should_return_max_10_courses_by_default(self):
         courses = CourseFactory.create_many(
             CategoryFactory(course=None),
             TeacherFactory(course=None),

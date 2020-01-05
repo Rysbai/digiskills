@@ -1,5 +1,4 @@
 import datetime
-
 import factory
 from django.db.models.signals import post_save
 
