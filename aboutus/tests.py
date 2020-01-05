@@ -6,19 +6,6 @@ from rest_framework import status
 from django.test import TestCase
 
 from aboutus.factory import AboutUsFactory
-from aboutus.models import AboutUs
-
-
-class AboutUsModelTest(TestCase):
-    # TODO: Make this test right
-    @skip
-    def test_should_raise_validate_error_if_aboutus_already_exist(self):
-        first = AboutUs.objects.create(payload_kg='First about us', payload_ru='First about us')
-        second = AboutUs.objects.create(payload_kg='Second about us', payload_ru='Second about us')
-        first.save()
-
-        with self.assertRaises(ValidationError):
-            second.save()
 
 
 class AboutUsAPITest(TestCase):
