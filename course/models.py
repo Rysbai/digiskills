@@ -2,6 +2,7 @@ import sys
 from PIL import Image
 from io import BytesIO
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -59,6 +60,11 @@ class Teacher(models.Model):
         verbose_name = 'Преподователь'
         verbose_name_plural = 'Преподователи'
 
+    def clean(self):
+        image_format = self.image.name.split('.')[-1].lower()
+        if image_format not in settings.ALLOWED_IMAGE_FORMATS:
+            raise ValidationError('Пожалуйста загружите фотографии в формате: jpg, jpeg или png!')
+
     def save(self, *args, **kwargs):
         self.image = self.compress_image(self.image)
         super().save(*args, **kwargs)
@@ -114,6 +120,10 @@ class Course(models.Model):
         verbose_name_plural = 'Курсы'
 
     def clean(self):
+        image_format = self.image.name.split('.')[-1].lower()
+        if image_format not in settings.ALLOWED_IMAGE_FORMATS:
+            raise ValidationError('Пожалуйста загружите фотографии в формате: jpg, jpeg или png!')
+
         if self.isOnline:
             if not self.registration_link:
                 raise ValidationError('Вы отметили что курс онлайн. Но не заполнили ссылку на регистрацию.')
