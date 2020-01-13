@@ -5,6 +5,8 @@ from io import BytesIO
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
+from django.conf import settings
+
 
 TITLE_MAX_LENGTH = 200
 LOCATION_MAX_LENGTH = 200
@@ -51,7 +53,14 @@ class News(models.Model):
         return uploaded_image
 
     def clean(self):
+        image_format = self.image.name.split('.')[-1].lower()
+        if image_format not in settings.ALLOWED_IMAGE_FORMATS:
+            raise ValidationError('Пожалуйста загрузите фотографию в формате: jpg, jpeg или png!')
+
+        if self.image.width / self.image.height != 16/9:
+            raise ValidationError('Пожалуйста загрузите фотографию с соотношением 16X9.')
+
         if not self.title_kg and not self.title_ru:
-            raise ValidationError('Пожалуйста заполните поле ЗАГОЛОВОК НОВОСТЯ хотя бы на русском или на кургызском.')
+            raise ValidationError('Пожалуйста заполните поле ЗАГОЛОВОК НОВОСТИ хотя бы на русском или на кыргызском.')
         if not self.description_kg and not self.description_ru:
-            raise ValidationError('Пожалуйста заполните поле ОПИСАНИЕ НОВОСТЯ хотя бы на русском или на кургызском.')
+            raise ValidationError('Пожалуйста заполните поле ОПИСАНИЕ НОВОСТИ хотя бы на русском или на кыргызском.')

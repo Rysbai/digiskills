@@ -121,6 +121,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'back_static/')
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+ALLOWED_IMAGE_FORMATS = ['png', 'jpg', 'jpeg']
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = config('SMTP_HOST')
