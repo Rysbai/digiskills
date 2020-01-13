@@ -61,6 +61,6 @@ class News(models.Model):
             raise ValidationError('Пожалуйста загрузите фотографию с соотношением 16X9.')
 
         if not self.title_kg and not self.title_ru:
-            raise ValidationError('Пожалуйста заполните поле ЗАГОЛОВОК НОВОСТЯ хотя бы на русском или на кыргызском.')
+            raise ValidationError('Пожалуйста заполните поле ЗАГОЛОВОК НОВОСТИ хотя бы на русском или на кыргызском.')
         if not self.description_kg and not self.description_ru:
-            raise ValidationError('Пожалуйста заполните поле ОПИСАНИЕ НОВОСТЯ хотя бы на русском или на кыргызском.')
+            raise ValidationError('Пожалуйста заполните поле ОПИСАНИЕ НОВОСТИ хотя бы на русском или на кыргызском.')
