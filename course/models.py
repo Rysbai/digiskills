@@ -63,10 +63,10 @@ class Teacher(models.Model):
     def clean(self):
         image_format = self.image.name.split('.')[-1].lower()
         if image_format not in settings.ALLOWED_IMAGE_FORMATS:
-            raise ValidationError('Пожалуйста загружите фотографию в формате: jpg, jpeg или png!')
+            raise ValidationError('Пожалуйста загрузите фотографию в формате: jpg, jpeg или png!')
 
-        if self.image.width / 960 != self.image.height / 960:
-            raise ValidationError('Пожалуйста загружите фотографию с соотношением 1X1.')
+        if self.image.width != self.image.height:
+            raise ValidationError('Пожалуйста загрузите фотографию с соотношением 1X1.')
 
     def save(self, *args, **kwargs):
         self.image = self.compress_image(self.image)
@@ -125,10 +125,10 @@ class Course(models.Model):
     def clean(self):
         image_format = self.image.name.split('.')[-1].lower()
         if image_format not in settings.ALLOWED_IMAGE_FORMATS:
-            raise ValidationError('Пожалуйста загружите фотографию в формате: jpg, jpeg или png!')
+            raise ValidationError('Пожалуйста загрузите фотографию в формате: jpg, jpeg или png!')
 
-        if self.image.width / 960 != self.image.height / 540:
-            raise ValidationError('Пожалуйста загружите фотографию с соотношением 16X9.')
+        if self.image.width / self.image.height != 16/9:
+            raise ValidationError('Пожалуйста загрузите фотографию с соотношением 16X9.')
 
         if self.isOnline:
             if not self.registration_link:
