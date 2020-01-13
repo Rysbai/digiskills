@@ -55,7 +55,10 @@ class News(models.Model):
     def clean(self):
         image_format = self.image.name.split('.')[-1].lower()
         if image_format not in settings.ALLOWED_IMAGE_FORMATS:
-            raise ValidationError('Пожалуйста загружите фотографии в формате: jpg, jpeg или png!')
+            raise ValidationError('Пожалуйста загружите фотографию в формате: jpg, jpeg или png!')
+
+        if self.image.width / 960 != self.image.height / 540:
+            raise ValidationError('Пожалуйста загружите фотографию с соотношением 16X9.')
 
         if not self.title_kg and not self.title_ru:
             raise ValidationError('Пожалуйста заполните поле ЗАГОЛОВОК НОВОСТЯ хотя бы на русском или на кургызском.')
