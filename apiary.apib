@@ -34,22 +34,48 @@ Some endoints no needs to lang option. For them in examples I don't provide lang
         }
 
 ## Teacher Collection [/api/course/teachers/?lang=kg]
+***Query params:***
+- *lang* - **lang=kg** or **lang=ru** Get content in language you want. By defalut you will content in kyrgyz labgguage.
+- *page* & *count*:  **page** - index of pagination. Default value 0. page. **count** - count of techers for one page. Default value 10.
+
+***Example:*** https://digiskills.kg/api/course/teachers/?lang=kg&page=0&count=3
 
 ### List of Teachers [GET]
 
 + Response 200 (application/json)
 
-        [
-            {
-                "id": 1,
-                "name": "Rysbai",
-                "surname": "Amanbai uulu",
-                "position": "Developer at google",
-                "about": "Почему он используется?\r\nДавно выяснено, что при оценке дизайна и композиции читаемый текст мешает сосредоточиться. Lorem Ipsum используют потому, что тот обеспечивает более или менее стандартное заполнение шаблона, а также реальное распределение букв и пробелов в абзацах, которое не получается при простой дубликации \"Здесь ваш текст.. Здесь ваш текст.. Здесь ваш текст..\" Многие программы электронной вёрстки и редакторы HTML используют Lorem Ipsum в качестве текста по умолчанию, так что поиск по ключевым словам \"lorem ipsum\" сразу показывает, как много веб-страниц всё ещё дожидаются своего настоящего рождения. За прошедшие годы текст Lorem Ipsum получил много версий. Некоторые версии появились по ошибке, некоторые - намеренно (например, юмористические варианты).",
-                "image": "/media/download.png",
-                "language": "ru"
-            }
-        ]
+        {
+            "total": 4,
+            "data": [
+                {
+                    "id": 1,
+                    "name": "Рысбай",
+                    "surname": "Аманбай уулу",
+                    "position": "Программист",
+                    "about": "wqfwf",
+                    "image": "https://digiskills.kg:443/media/teacher/400X400.jpeg",
+                    "language": "ru"
+                },
+                {
+                    "id": 2,
+                    "name": "Alym",
+                    "surname": "Amanbai uulu",
+                    "position": "Препод",
+                    "about": "цупауцьл",
+                    "image": "https://digiskills.kg:443/media/teacher/400X400_Bgpz94e.jpeg",
+                    "language": "ru"
+                },
+                {
+                    "id": 3,
+                    "name": "Ондвняфш",
+                    "surname": "Тынычбекова",
+                    "position": "Препод",
+                    "about": "цутцул",
+                    "image": "https://digiskills.kg:443/media/teacher/400X400_IpWuxcX.jpeg",
+                    "language": "ru"
+                }
+            ]
+        }
 
 ## Teacher by id [/api/course/teachers/1/?lang=kg]
 
@@ -73,7 +99,7 @@ Some endoints no needs to lang option. For them in examples I don't provide lang
 - *category_id* - filter by category id
 - *teacher_id* - filter by teacher id
 - *lang* - **lang=kg** or **lang=ru** filter courses by course language. By default you will get courses in both of language.
-- *page* & *count*:  **count** - index of pagination. Default value 0. page. **page** - count for one page. Default value 10.
+- *page* & *count*:  **page** - index of pagination. Default value 0. page. **count** - count of courses for one page. Default value 10.
 
 
 
@@ -221,7 +247,7 @@ Some endoints no needs to lang option. For them in examples I don't provide lang
 
 **Query params**:
 - *lang* - **lang=kg** or **lang=ru** get content in specific language. By default you will get news in kyrgyz language.
-- *page* & *count*:  **count** - index of pagination. Default value 0. page. **page** - count for one page. Default value 10.
+- *page* & *count*:  **page** - index of pagination. Default value 0. page. **count** - count of news for one page. Default value 10.
 
 ***Example:*** https://digiskills.kg/api/news/?lang=kg&page=0&count=4
 
