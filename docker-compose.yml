@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    volumes:
+      - .:/opt/services/digiskills
+      - static_volume:/opt/services/digiskills/src/static
+      - media_volume:/opt/services/digiskills/src/media
+    ports:
+      - 8000:8000
+    env_file:
+      - ./src/.env
+    networks:
+      - nginx_network
+      - db_network
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:1.13
+    ports:
+      - 80
+    volumes:
+      - ./config/nginx/conf.d:/etc/nginx/conf.d
+      - static_volume:/opt/services/digiskills/src/static
+      - media_volume:/opt/services/digiskills/src/media
+    depends_on:
+      - web
+    networks:
+      - nginx_network
+
+  db:
+    image: postgres:10
+    env_file:
+      - src/.env
+    networks:
+      - db_network
+    volumes:
+    - db_volume:/var/lib/postgresql/data
+
+networks:
+  nginx_network:
+    driver: bridge
+  db_network:
+    driver: bridge
+
+volumes:
+  db_volume:
+  static_volume:
+  media_volume:

@@ -1,10 +1,13 @@
-.venv/*
 src/staticfiles/*
 src/media/*
 src/static/*
 src/back_static/*
 src/.idea/*
-*.pyc
 src/.env
 src/db.sqlite3
 src/digikills.sock
+.venv/*
+db.sqlite3
+.env
+.idea/
+*.pyc
