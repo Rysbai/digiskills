@@ -10,4 +10,8 @@ src/digikills.sock
 db.sqlite3
 .env
 .idea/
+media/
+static/
+digiskills.sock
+back_static
 *.pyc

@@ -7,7 +7,6 @@ WORKDIR /opt/services/digiskills
 
 # install our two dependencies
 ADD requirements.txt /opt/services/digiskills/
-RUN ls -l
 RUN pip install -r requirements.txt
 
 # copy our project code

@@ -19,8 +19,9 @@ services:
 
   nginx:
     image: nginx:1.13
+    command: nginx -g "daemon off;"
     ports:
-      - 80
+      - 8080:80
     volumes:
       - ./config/nginx/conf.d:/etc/nginx/conf.d
       - static_volume:/opt/services/digiskills/src/static
