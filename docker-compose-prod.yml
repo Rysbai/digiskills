@@ -5,6 +5,7 @@ services:
     image: nginx:1.13
     ports:
       - 80:80
+      - 443:443
     volumes:
       - ./config/nginx/prod.conf.d:/etc/nginx/conf.d
       - web-root:/opt/services/front/build
@@ -12,6 +13,7 @@ services:
       - media_volume:/opt/services/digiskills/src/media
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
+      - ./dhparam:/etc/ssl/certs
     depends_on:
       - back
       - front
@@ -27,7 +29,7 @@ services:
       - web-root:/opt/services/front/build
     depends_on:
       - nginx
-    command: certonly --webroot --webroot-path=/opt/services/front --email rysbai.coder@gmail.com --agree-tos --no-eff-email --staging -d digiskills.com  -d www.digiskills.com
+    command: certonly --webroot --webroot-path=/opt/services/front --email rysbai.coder@gmail.com --agree-tos --no-eff-email --force-renewal -d digiskills.kg  -d www.digiskills.kg
 
 networks:
   nginx_network:
