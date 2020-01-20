@@ -1,11 +1,11 @@
 version: '3'
 
 services:
-  web:
+  back:
     build: .
     volumes:
       - .:/opt/services/digiskills
-      - static_volume:/opt/services/digiskills/src/static
+      - static_volume:/opt/services/digiskills/src/back_static
       - media_volume:/opt/services/digiskills/src/media
     ports:
       - 8000:8000
@@ -17,17 +17,24 @@ services:
     depends_on:
       - db
 
+  front:
+    build: https://github.com/Aidanaaidlanova/digitalskills.git
+    volumes:
+      - web-root:/opt/services/front/build
+
   nginx:
     image: nginx:1.13
     command: nginx -g "daemon off;"
     ports:
-      - 8080:80
+      - 80:80
     volumes:
-      - ./config/nginx/conf.d:/etc/nginx/conf.d
-      - static_volume:/opt/services/digiskills/src/static
+      - ./config/nginx/local.conf.d:/etc/nginx/conf.d
+      - web-root:/opt/services/front/build
+      - static_volume:/opt/services/digiskills/src/back_static
       - media_volume:/opt/services/digiskills/src/media
     depends_on:
-      - web
+      - back
+      - front
     networks:
       - nginx_network
 
@@ -48,5 +55,6 @@ networks:
 
 volumes:
   db_volume:
+  web-root:
   static_volume:
   media_volume:
