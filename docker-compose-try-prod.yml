@@ -4,8 +4,8 @@ services:
   nginx:
     image: nginx:1.13
     ports:
-      - 81:80
-      - 444:443
+      - 82:82
+      - 444:444
     volumes:
       - ./config/nginx/tryprod.conf.d:/etc/nginx/conf.d
       - web-root:/opt/services/front/build
