@@ -50,6 +50,7 @@ jobs:
       env:
         DEBUG: "True"
         SECRET_KEY: kakaka
+        ALLOWED_HOSTS: 0.0.0.0
         HOST_NAME: 127.0.0.1
         PORT: 8000
         SSL_SECURED: False
