@@ -22,22 +22,6 @@ services:
     volumes:
       - web-root:/opt/services/front/build
 
-  nginx:
-    image: nginx:1.13
-    command: nginx -g "daemon off;"
-    ports:
-      - 82:82
-    volumes:
-      - ./config/nginx/local.conf.d:/etc/nginx/conf.d
-      - web-root:/opt/services/front/build
-      - static_volume:/opt/services/digiskills/src/back_static
-      - media_volume:/opt/services/digiskills/src/media
-    depends_on:
-      - back
-      - front
-    networks:
-      - nginx_network
-
   db:
     image: postgres:10
     env_file:
