@@ -12,6 +12,7 @@ services:
     env_file:
       - ./src/.env
     networks:
+      - nginx_network
       - db_network
     depends_on:
       - db
@@ -31,6 +32,8 @@ services:
     - db_volume:/var/lib/postgresql/data
 
 networks:
+  nginx_network:
+    driver: bridge
   db_network:
     driver: bridge
 
