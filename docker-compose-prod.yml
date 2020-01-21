@@ -29,7 +29,7 @@ services:
       - web-root:/opt/services/front/build
     depends_on:
       - nginx
-    command: certonly --webroot --webroot-path=/opt/services/front --email rysbai.coder@gmail.com --agree-tos --no-eff-email --force-renewal -d digiskills.kg  -d www.digiskills.kg
+    command: certonly --webroot --webroot-path=/opt/services/front/built --email rysbai.coder@gmail.com --agree-tos --no-eff-email --force-renewal -d digiskills.kg  -d www.digiskills.kg
 
 networks:
   nginx_network:
