@@ -21,7 +21,7 @@ jobs:
       run: |
         sudo apt-get install libpq-dev
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r src/requirements.txt
     - name: Lint with flake8
       run: |
         pip install flake8
@@ -31,8 +31,8 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Make migrations
       run: |
-        python manage.py makemigrations
-        python manage.py migrate    
+        python src/manage.py makemigrations
+        python src/manage.py migrate
       env:
         DEBUG: "True"
         SECRET_KEY: kakaka
@@ -45,7 +45,7 @@ jobs:
         SMTP_PASSWORD: asdasdads
     - name: Run tests
       run: |
-        python manage.py test
+        python src/manage.py test
       env:
         DEBUG: "True"
         SECRET_KEY: kakaka
