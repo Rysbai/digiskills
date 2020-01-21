@@ -71,9 +71,42 @@ class TeacherAPITest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            data,
+            data['data'],
             TeacherSerializer(teachers, many=True, lang='kg').data
         )
+
+    def test_should_return_first_page_and_10_courses_by_default(self):
+        TeacherFactory.create_many(count=11)
+        path = reverse('course:teacher_list')
+
+        response = self.client.get(path)
+        data = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['total'], 11)
+        self.assertEqual(len(data['data']), 10)
+
+    def test_should_return_that_page_you_provide(self):
+        TeacherFactory.create_many(count=11)
+        path = reverse('course:teacher_list') + '?page=1'
+
+        response = self.client.get(path)
+        data = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['total'], 11)
+        self.assertEqual(len(data['data']), 1)  # because 1st page contain 10, second contain 11-10 page
+
+    def test_should_return_that_count_you_provide(self):
+        TeacherFactory.create_many(count=11)
+        path = reverse('course:teacher_list') + '?count=5'
+
+        response = self.client.get(path)
+        data = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['total'], 11)
+        self.assertEqual(len(data['data']), 5)
 
     def test_should_return_all_teachers_in_russian_content_if_lang_is_ru(self):
         teachers = TeacherFactory.create_many()
@@ -84,7 +117,7 @@ class TeacherAPITest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            data,
+            data['data'],
             TeacherSerializer(teachers, many=True, lang='ru').data
         )
 
