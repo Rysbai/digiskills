@@ -1,14 +1,14 @@
 import os
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
-from decouple import config, Csv
+from decouple import config
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = (config('DEBUG') == 'True')
 
-ALLOWED_HOSTS = ['64.225.36.157', '127.0.0.1', 'digiskills.kg', 'www.digiskills.kg']
+ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
 HOST_NAME = config('HOST_NAME')
 PORT = config('PORT')
 SSL_SECURED = (config('SSL_SECURED') == 'True')
@@ -75,10 +75,10 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': config('DB_NAME'),
-            'USER': config('DB_USER'),
-            'PASSWORD': config('DB_PASSWORD'),
-            'HOST': config('DB_HOST'),
+            'NAME': config('POSTGRES_DB'),
+            'USER': config('POSTGRES_USER'),
+            'PASSWORD': config('POSTGRES_PASSWORD'),
+            'HOST': config('POSTGRES_HOST'),
             'PORT': '',
         }
     }
