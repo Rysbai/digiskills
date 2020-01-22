@@ -16,7 +16,6 @@ services:
       - ./dhparam:/etc/ssl/certs
     depends_on:
       - back
-      - front
     networks:
       - nginx_network
 
