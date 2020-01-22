@@ -19,6 +19,7 @@ services:
 
   front:
     build: https://github.com/Aidanaaidlanova/digitalskills.git
+    command: npm run build
     volumes:
       - web-root:/opt/services/front/build
 
