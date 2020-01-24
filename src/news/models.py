@@ -29,8 +29,13 @@ class News(models.Model):
         verbose_name = 'Новости'
         verbose_name_plural = 'Новости'
 
+    def __init__(self, *args, **kwargs):
+        super(News, self).__init__(*args, **kwargs)
+        self._current_image = self.image
+
     def save(self, *args, **kwargs):
-        self.image = self.compress_image(self.image)
+        if self._state.adding or self.image != self._current_image:
+            self.image = self.compress_image(self.image)
         super().save(*args, **kwargs)
 
     def compress_image(self, image):

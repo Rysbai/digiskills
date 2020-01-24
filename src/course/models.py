@@ -60,6 +60,10 @@ class Teacher(models.Model):
         verbose_name = 'Преподователь'
         verbose_name_plural = 'Преподователи'
 
+    def __init__(self, *args, **kwargs):
+        super(Teacher, self).__init__(*args, **kwargs)
+        self._current_image = self.image
+
     def clean(self):
         image_format = self.image.name.split('.')[-1].lower()
         if image_format not in settings.ALLOWED_IMAGE_FORMATS:
@@ -69,7 +73,8 @@ class Teacher(models.Model):
             raise ValidationError('Пожалуйста загрузите фотографию с соотношением 1X1.')
 
     def save(self, *args, **kwargs):
-        self.image = self.compress_image(self.image)
+        if self._state.adding or self.image != self._current_image:
+            self.image = self.compress_image(self.image)
         super().save(*args, **kwargs)
 
     def compress_image(self, image):
@@ -122,6 +127,10 @@ class Course(models.Model):
         verbose_name = 'Курс'
         verbose_name_plural = 'Курсы'
 
+    def __init__(self, *args, **kwargs):
+        super(Course, self).__init__(*args, **kwargs)
+        self._current_image = self.image
+
     def clean(self):
         image_format = self.image.name.split('.')[-1].lower()
         if image_format not in settings.ALLOWED_IMAGE_FORMATS:
@@ -137,7 +146,8 @@ class Course(models.Model):
                 raise ValidationError('Вы отметили что курс онлайн. Но не заполнили дата и время начало трансляции.')
 
     def save(self, *args, **kwargs):
-        self.image = self.compress_image(self.image)
+        if self._state.adding or self.image != self._current_image:
+            self.image = self.compress_image(self.image)
         super().save(*args, **kwargs)
 
     def compress_image(self, image):
