@@ -57,6 +57,7 @@ class Teacher(models.Model):
         return self.name + ' ' + self.surname
 
     class Meta:
+        ordering = ('-id', )
         verbose_name = 'Преподователь'
         verbose_name_plural = 'Преподователи'
 

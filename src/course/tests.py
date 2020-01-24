@@ -72,7 +72,7 @@ class TeacherAPITest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             data['data'],
-            TeacherSerializer(teachers, many=True, lang='kg').data
+            list(reversed(TeacherSerializer(teachers, many=True, lang='kg').data))
         )
 
     def test_should_return_first_page_and_10_courses_by_default(self):
@@ -118,7 +118,7 @@ class TeacherAPITest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             data['data'],
-            TeacherSerializer(teachers, many=True, lang='ru').data
+            list(reversed(TeacherSerializer(teachers, many=True, lang='ru').data))
         )
 
     def test_should_return_teacher_by_id_in_kyrgyz_content_by_default(self):
