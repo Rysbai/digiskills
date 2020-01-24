@@ -9,11 +9,17 @@ class NewsSerializer(Serializer):
         super(Serializer, self).__init__(*args, **kwargs)
 
     def to_representation(self, instance):
+        if self.lang == 'ru':
+            title = instance.title_ru or instance.title_kg
+            description = instance.description_ru or instance.description_kg
+        else:
+            title = instance.title_kg or instance.title_ru
+            description = instance.description_kg or instance.description_ru
+
         return {
             'id': instance.id,
-            'title': instance.title_ru if instance.title_ru and self.lang == 'ru' else instance.title_kg,
-            'description': instance.description_ru if instance.description_ru and self.lang == 'ru' \
-                else instance.description_kg,
+            'title': title,
+            'description': description,
             'image': get_media_absolute_url(instance.image.url),
             'views': instance.views,
             'pub_date': instance.pub_date

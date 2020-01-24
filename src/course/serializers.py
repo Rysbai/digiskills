@@ -26,12 +26,16 @@ class TeacherSerializer(Serializer):
         super(Serializer, self).__init__(*args, **kwargs)
 
     def to_representation(self, instance):
+        if self.lang == 'ru':
+            about = instance.about_ru or instance.about_kg
+        else:
+            about = instance.about_kg or instance.about_ru
         return {
             'id': instance.id,
             'name': instance.name,
             'surname': instance.surname,
             'position': instance.position,
-            'about': instance.about_ru if instance.about_ru and self.lang == 'ru' else instance.about_kg,
+            'about': about,
             'image': get_media_absolute_url(instance.image.url),
             'language': instance.language
         }
