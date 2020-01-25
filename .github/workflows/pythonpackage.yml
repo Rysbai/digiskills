@@ -37,9 +37,9 @@ jobs:
         DEBUG: "True"
         SECRET_KEY: kakaka
         ALLOWED_HOSTS: 0.0.0.0
-        HOST_NAME: 127.0.0.1
-        PORT: 8000
-        SSL_SECURED: False
+        MEDIA_HOST_NAME: 127.0.0.1
+        MEDIA_PORT: 8000
+        MEDIA_SSL_SECURED: False
         SMTP_HOST: smtp.gmail.com
         SMTP_PORT: 587
         SMTP_LOGIN: test@gmail.com
@@ -51,9 +51,9 @@ jobs:
         DEBUG: "True"
         SECRET_KEY: kakaka
         ALLOWED_HOSTS: 0.0.0.0
-        HOST_NAME: 127.0.0.1
-        PORT: 8000
-        SSL_SECURED: False
+        MEDIA_HOST_NAME: 127.0.0.1
+        MEDIA_PORT: 8000
+        MEDIA_SSL_SECURED: False
         SMTP_HOST: smtp.gmail.com
         SMTP_PORT: 587
         SMTP_LOGIN: test@gmail.com
