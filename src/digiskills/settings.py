@@ -9,9 +9,9 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = (config('DEBUG') == 'True')
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
-HOST_NAME = config('HOST_NAME')
-PORT = config('PORT')
-SSL_SECURED = (config('SSL_SECURED') == 'True')
+MEDIA_HOST_NAME = config('MEDIA_HOST_NAME')
+MEDIA_PORT = config('MEDIA_PORT')
+MEDIA_SSL_SECURED = (config('MEDIA_SSL_SECURED') == 'True')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
