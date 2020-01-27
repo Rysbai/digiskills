@@ -1,4 +1,5 @@
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _
 from django_summernote.admin import SummernoteModelAdmin, SummernoteInlineModelAdmin
 from django_summernote.utils import get_attachment_model
 from django.contrib import admin
@@ -74,8 +75,10 @@ class CourseAdmin(SummernoteModelAdmin):
 
 admin.site.unregister(Group)
 admin.site.unregister(get_attachment_model())
-
+admin.site.site_header = _("Администрирование Digital Skills")
+admin.site.site_title = _("Администрирование Digital Skills")
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Teacher, TeacherAdmin)
 admin.site.register(Course, CourseAdmin)
+
