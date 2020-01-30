@@ -40,23 +40,24 @@ class News(models.Model):
 
     def compress_image(self, image):
         image_size = (960, 540)
-        image_temproary = Image.open(image)
+        image_temporary = Image.open(image)
         output_io_stream = BytesIO()
         image_format = "JPEG" if image.name.split('.')[-1].lower() == 'jpg' else image.name.split('.')[-1]
 
+        x0, y0 = 0, 0
         if image.width/image_size[0] > image.height/image_size[1]:
-            first_height = image.height
-            first_width = int(image.width * first_height / image_size[1])
+            y1 = image.height
+            x1 = int(image_size[0] * y1 / image_size[1])
         else:
-            first_width = image.width
-            first_height = int(image.width * image_size[1] / image_size[0])
+            x1 = image.width
+            y1 = int(image_size[1] * x1 / image_size[0])
 
-        formatted_image = image_temproary.transform(
-            (first_width, first_height),
-            Image.EXTENT, data=[0, 0, first_width, first_height]
+        formatted_image = image_temporary.transform(
+            (x1, y1),
+            Image.EXTENT, data=[x0, y0, x1, y1]
         )
-        image_temproary_resized = formatted_image.resize(image_size, Image.ANTIALIAS)
-        image_temproary_resized.save(output_io_stream, format=image_format)
+        image_temporary_resized = formatted_image.resize(image_size, Image.ANTIALIAS)
+        image_temporary_resized.save(output_io_stream, format=image_format)
         output_io_stream.seek(0)
         uploaded_image = InMemoryUploadedFile(
             output_io_stream,
@@ -72,9 +73,6 @@ class News(models.Model):
         image_format = self.image.name.split('.')[-1].lower()
         if image_format not in settings.ALLOWED_IMAGE_FORMATS:
             raise ValidationError('Пожалуйста загрузите фотографию в формате: jpg, jpeg или png!')
-
-        # if self.image.width / self.image.height != 16/9:
-        #     raise ValidationError('Пожалуйста загрузите фотографию с соотношением 16X9.')
 
         if not self.title_kg and not self.title_ru:
             raise ValidationError('Пожалуйста заполните поле ЗАГОЛОВОК НОВОСТИ хотя бы на русском или на кыргызском.')
